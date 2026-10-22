@@ -8,12 +8,18 @@
   propose canonical transaction bytes, secp256k1 signed intent, account/state
   transitions, AppHash V2, ABCI validity and negative-vector plans. These
   rules are **proposed pending controller and owner review**, not accepted or
-  implemented. The runtime remains the Phase 02 empty-block application.
+  implemented. The controller requested R1–R5 rework of the initial Draft PR;
+  the existing Phase 03A branch now records revised validation order, nonce
+  overflow, TxID/RPC identity, boundary fixtures and AppHash cost. Rework
+  awaits renewed controller review. The runtime remains the Phase 02
+  empty-block application.
 - **Verification:** `git diff --check`, `make verify` and
   `make test-integration` exited 0 on the Phase 03A branch; exact commands,
   output, toolchain and limits are in `research/evidence/phase_03a/` and
-  `research/PHASE_REPORTS/PHASE_03A_REPORT.md`. No cryptographic vector was
-  generated or executed in this specification phase.
+  `research/PHASE_REPORTS/PHASE_03A_REPORT.md`. The same required checks and
+  a runtime/dependency/test source-diff check exited 0 during controller
+  rework; see `controller_rework_verification.txt`. No cryptographic vector
+  was generated or executed in this specification phase.
 - **Historical baseline:** Phase 02/02R architecture, reports and evidence
   remain preserved. Phase 02 V1 AppHash and `PLUTO02!` storage are still the
   only implemented state format. V2 is a fresh-chain proposal with no

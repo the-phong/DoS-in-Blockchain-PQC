@@ -16,7 +16,13 @@ encoding/address rules, DER signatures, an independent sender-address field,
 fees/gas/memo/expiry fields and variable-length encodings. Rationale: a small
 unambiguous B0 correctness baseline with one sender identity. Trade-offs:
 fee-free operation has no economic spam deterrent; addresses are not Ethereum
-compatible; future fields require a new version. Status: **Proposed, not
+compatible; future fields require a new version. The controller rework fixes
+cheap-rejection precedence: structural checks, chain match, positive amount
+and canonical signature scalars precede point validation/ECDSA. A matching
+sender nonce of `MaxUint64` fails Code 6 before balance checks. Pluto TxID
+exists exactly for structurally valid V1 wire with in-range low-S scalars,
+even if its key, signature, chain or state is invalid; CometBFT RPC instead
+uses SHA-256 of raw transaction bytes. Status: **Proposed, not
 accepted**. Verification: no transaction bytes or cryptographic vectors were
 generated or executed in Phase 03A.
 
@@ -29,7 +35,9 @@ Merkle/trie state root, account deletion, automatic migration and unordered
 storage hashing. Rationale: independently reproducible state transitions
 before optional EVM work. Trade-offs: flat commitment has no account proof
 and may be costly at scale; physical atomic persistence is future Phase 03C
-work. Status: **Proposed, not accepted**. Verification: specification review
+work. Full-state recomputation is proportional to account count; B0/B1
+measurements must control account count and execution model. Status:
+**Proposed, not accepted**. Verification: specification review
 and arithmetic/length checks only; no V2 state exists in code.
 
 **D-022 — B0 ABCI validity policy (Proposed).** Select conservative
@@ -42,6 +50,10 @@ transaction bytes. Rationale: independent proposer-injection defense and
 deterministic fallback without unnecessary application halt. Trade-offs:
 strict proposal rejection may cost rounds under bad proposers; the anomalous
 decided-block fallback and fixed count/byte limits need independent review.
+The shared evaluator now explicitly uses cheap structural/amount/scalar checks
+before ECDSA, rejects nonce overflow as Code 6, and distinguishes Pluto TxID
+eligibility from CometBFT's raw-byte RPC hash. Block-limit fixtures require
+otherwise valid signed and funded sequential transactions.
 Status: **Proposed, not accepted**. Verification: pinned v0.38.26 interface
 review only; current Phase 02 runtime still rejects all transactions.
 

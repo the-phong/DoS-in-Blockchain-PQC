@@ -6,7 +6,7 @@
 
 All future transaction paths use the same ordered decode, authentication and transition evaluator specified in [transaction V1](B0_CLASSICAL_TRANSACTION_PROTOCOL_V1.md) and [state V1](B0_STATE_TRANSITION_SPEC_V1.md). They may use different state snapshots, but MUST assign the same code to the same transaction and candidate state. The evaluator returns `(code, next_state)`; on any nonzero code, `next_state` equals input state exactly. No local cache result is authoritative for consensus.
 
-The B0 application-level block limit is **6,144 transactions** and **1,048,576 aggregate raw transaction bytes**, summed with checked unsigned arithmetic. Each transaction is at most 195 bytes. Both bounds are independently reachable with canonical transactions: 6,145 minimum-size records fit under the byte limit, while 5,378 maximum-size records exceed it. These limits are fixed protocol rules for `ProcessProposal` and `FinalizeBlock`, independent of node resources. CometBFT may enforce stricter consensus block limits; `PrepareProposal` additionally obeys `RequestPrepareProposal.MaxTxBytes`. Proposing fewer transactions due to local mempool contents is allowed; accepting or rejecting the same complete proposal based on CPU, wall clock, queue occupancy, mempool arrival or nonreplicated cache is forbidden.
+The B0 application-level block limit is **6,144 transactions** and **1,048,576 aggregate raw transaction bytes**, summed with checked unsigned arithmetic. Each transaction is at most 195 bytes. Both bounds are independently reachable with **otherwise valid, signed, funded, sequential-nonce transactions**: 6,145 records with a 1-byte chain ID total 897,170 bytes and isolate count, while 5,378 records with a 50-byte chain ID total 1,048,710 bytes and isolate aggregate size. Exact fixtures and preconditions are in [vector V20](B0_TEST_VECTOR_PLAN_V1.md#2-required-vector-matrix). These limits are fixed protocol rules for `ProcessProposal` and `FinalizeBlock`, independent of node resources. CometBFT may enforce stricter consensus block limits; `PrepareProposal` additionally obeys `RequestPrepareProposal.MaxTxBytes`. Proposing fewer transactions due to local mempool contents is allowed; accepting or rejecting the same complete proposal based on CPU, wall clock, queue occupancy, mempool arrival or nonreplicated cache is forbidden.
 
 The following result codes and exact `Log` strings are proposed for both `ResponseCheckTx` and `ExecTxResult`. `Codespace` is `pluto.b0.v1`; `Data` and events are empty, `GasWanted`/`GasUsed` are zero, and `Priority` in `CheckTx` is zero. Codes are determined by the first failing stage in the transaction specification. Code 10 is a block-level envelope failure and never a per-transaction validity result from `CheckTx`.
 
@@ -15,16 +15,18 @@ The following result codes and exact `Log` strings are proposed for both `Respon
 | 0 | `ok` | Valid against the evaluated state; transfer applied only in finalization. |
 | 1 | `malformed` | Invalid length, magic, version, chain-ID syntax or noncanonical field/encoding. |
 | 2 | `wrong_chain` | Well-formed chain ID differs from committed/candidate chain ID. |
-| 3 | `invalid_key` | Compressed public key fails secp256k1 point validation. |
-| 4 | `invalid_signature` | Scalar range, high-S or ECDSA verification failure. |
-| 5 | `invalid_amount` | Amount is zero. |
-| 6 | `invalid_nonce` | Nonce mismatch or sender nonce cannot increment. |
+| 3 | `invalid_key` | Compressed public key fails secp256k1 point validation, including its prefix. |
+| 4 | `invalid_signature` | Scalar range/low-S canonicality or ECDSA verification failure. |
+| 5 | `invalid_amount` | Amount is zero; checked before scalar, point or ECDSA work. |
+| 6 | `invalid_nonce` | Wire nonce differs from candidate sender nonce, or matching candidate nonce is `MaxUint64` and cannot increment. |
 | 7 | `insufficient_balance` | Sender lacks amount, including absent sender. |
 | 8 | `balance_overflow` | Receiver credit would overflow `uint64`. |
 | 9 | `account_limit` | A new receiver would exceed 65,536 accounts. |
 | 10 | `block_limit` | Decided block exceeds app count/byte limit; every tx fails and none executes. |
 
 No gas, fee, validator update or consensus-parameter update is returned by this protocol. A signature failure, bad nonce or insufficient balance is an application rejection, not an ABCI transport error. A malformed or state-invalid transaction never mutates state, consumes a nonce or reduces total supply.
+
+For every per-transaction evaluation, first-failure precedence is **Code 1 structural → Code 2 chain mismatch → Code 5 zero amount → Code 4 noncanonical scalar → Code 3 invalid compressed point → Code 4 failed ECDSA → Code 6 nonce mismatch or `MaxUint64` → Code 7 insufficient balance → Code 8 receiver overflow → Code 9 account limit → Code 0 success**. This order applies identically in `CheckTx`, `PrepareProposal`, `ProcessProposal` and in-limit `FinalizeBlock`; only the evaluated account snapshot differs. Code 10 overrides all per-transaction evaluation for an over-limit decided block. Structural and amount rejection precede expensive curve/ECDSA work; none of these stages depends on local resource measurements. The transaction specification's independent TxID eligibility predicate requires only structural checks and canonical scalar range/low-S, regardless of this first-failure precedence: Code 1 and scalar-canonicality Code 4 have no Pluto TxID; Code 2, 3, 5, ECDSA-verification Code 4, and state-dependent Codes 6–9 can have one. CometBFT RPC uses its own raw-byte `SHA-256(wire)` hash for transaction lookup; tests correlate both identifiers by exact raw bytes and, for included duplicates, block height/index as described in [transaction V1](B0_CLASSICAL_TRANSACTION_PROTOCOL_V1.md#4-address-and-transaction-id).
 
 ## 2. Method-by-method contract
 

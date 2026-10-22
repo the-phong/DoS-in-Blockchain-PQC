@@ -43,7 +43,7 @@ Execution environment: Go 1.24.1 linux/amd64, WSL2 Ubuntu kernel `6.18.33.2-micr
 | `make test-integration` | 0 | Existing real-node empty-block/restart integration passed in a temporary home. |
 | `git diff --exit-code ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab -- cmd internal test go.mod go.sum Makefile .github/workflows/verify.yml` | 0 | Runtime, tests, dependencies and build/workflow files unchanged. |
 
-A separate [arithmetic review](../evidence/phase_03a/spec_check.txt) verified magic lengths, 64-hex-digit secp256k1 `p/n`, transaction length range 146–195, and that the count and byte limits can each be exceeded independently by canonical-length transactions. [Git baseline evidence](../evidence/phase_03a/git_baseline.txt) records the current remote SHA. These are specification consistency checks, not cryptographic vectors or execution tests. No B0 signing key was used to generate a transaction, no address/TxID/AppHash V2 sample was asserted, and no B0 vector was run. The vector plan marks all exact bytes and observed results TBD.
+A separate [arithmetic review](../evidence/phase_03a/spec_check.txt) verified magic lengths, 64-hex-digit secp256k1 `p/n`, transaction length range 146–195, and that the count and byte limits can each be exceeded independently by canonical-length transactions. [Git baseline evidence](../evidence/phase_03a/git_baseline.txt) records the current remote SHA. The first audit commit's GitHub push and PR `verify` checks both completed successfully, running the existing foundation and real-node restart workflow; see [publication evidence](../evidence/phase_03a/publication.txt). These are specification consistency and unchanged-runtime checks, not cryptographic vectors or B0 execution tests. No B0 signing key was used to generate a transaction, no address/TxID/AppHash V2 sample was asserted, and no B0 vector was run. The vector plan marks all exact bytes and observed results TBD.
 
 ## 6. Risks and review questions
 
@@ -67,11 +67,11 @@ A separate [arithmetic review](../evidence/phase_03a/spec_check.txt) verified ma
 | A8 build and integration | PASS | `make verify` and `make test-integration` exit 0 on unchanged Phase 02 code. |
 | A9 scope discipline | PASS | No Phase 03B package, EVM, ML-DSA, hybrid or DoS implementation. |
 | A10 governance | PASS for drafting | Owner authorization recorded; D-020–D-022 explicitly proposed; Phase 03B unapproved. |
-| A11 Git isolation | Pending publication | Final branch SHA, push and Draft PR URL are reported after Git publication. No merge. |
+| A11 Git isolation | PASS | Only `phase/03a-tx-protocol` pushed; Draft PR #3 targets `test-mainet`; no merge or integration-branch push. |
 | A12 reproducibility | PASS for spec phase | Exact source, toolchain, checks and vector-generation recipe; no fabricated outputs. |
 
 **Verdict: review-ready specification proposal, not protocol acceptance or implementation readiness by itself.** The controller and owner decide whether to accept the proposed normative rules. No test result in this report validates future B0 transaction behavior.
 
 ## 8. Git publication and STOP
 
-Working branch: `phase/03a-tx-protocol`; source SHA: `ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab`. Result HEAD SHA, push status and Draft PR URL are reported in the final chat after publication; a commit cannot embed its own final SHA. Merge: **NO**. Phase 03B: **NOT AUTHORIZED**. Execution stops after this phase report and controller handoff.
+Working branch: `phase/03a-tx-protocol`; source SHA: `ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab`; first protocol commit: `62d2e5be18fa6e8bd58c474b1764ad19d56ea7b3`. Push: **SUCCESS**, branch only. Draft PR: <https://github.com/the-phong/DoS-in-Blockchain-PQC/pull/3>, base `test-mainet`, open and unmerged. The final HEAD SHA after this publication-metadata update is in the final chat and PR; a commit cannot embed its own final SHA. Merge: **NO**. Phase 03B: **NOT AUTHORIZED**. Execution stops after this phase report and controller handoff.

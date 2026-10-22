@@ -9,8 +9,8 @@ production chain, EVM, hybrid verifier or multi-validator experiment.
 ## Prerequisites and build
 
 On Linux/WSL2, install Go 1.24.x or newer and GNU Make. Network access is
-needed on first build to download exact pinned Go modules. Docker and a Git
-identity are not required. From this directory:
+needed on first build to download exact pinned Go modules. Docker is not
+required. From this directory:
 
 ```bash
 make build
@@ -39,6 +39,8 @@ all three at init with `--rpc-port`, `--p2p-port`, `--abci-port` for another
 local test. Empty blocks are configured every second. Protect files under
 `.pluto/config/`, especially private validator and node keys; never publish
 them or expose the development RPC/validator publicly.
+Protect `config.toml` as well: startup does not recheck its listener and proxy
+addresses against the localhost metadata written by `init`.
 
 From another terminal, inspect real CometBFT RPC responses:
 
@@ -90,7 +92,10 @@ Phase 01 baseline checksums in
 [Architecture](research/ARCHITECTURE.md), [decisions](research/DECISIONS.md),
 [phase status](research/PHASE_STATUS.md) and the
 [manifest](research/config/manifest.yaml) are the current governance records.
-The 14-phase [master plan](research/MASTER_PLAN.md) is unchanged. Phase 03
-classical transaction work is **not authorized**; independent review follows
-this report. No Git commit, branch or remote is required for this local phase.
+The [Phase 02R independent review](research/PHASE_REPORTS/PHASE_02R_REPORT.md)
+records fresh checks and limitations. The 14-phase [master plan](research/MASTER_PLAN.md)
+now places minimal B0-Core before a conditional Phase 04 EVM decision. Phase
+03A and later implementation are **not authorized**. D-018 governs new work:
+one approved phase per branch, Draft PRs to `test-mainet`, and owner-controlled
+merges. The Phase 02 local-only Git exception remains in historical records.
 

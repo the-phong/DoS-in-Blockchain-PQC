@@ -1,9 +1,12 @@
-# Pluto architecture — implemented Phase 02 foundation
+# Pluto architecture — implemented Phase 02 baseline and Phase 02R review
 
 This section supersedes the historical Phase 01 proposal retained below for
 traceability. The implemented chain is a **single-validator, transaction-free**
 custom Go ABCI++ application connected by a localhost socket to a pinned
 CometBFT v0.38.26 child process. It is not an EVM or hybrid chain.
+Phase 02R retains this implementation. D-019 requires a complete minimal
+classical B0-Core before deciding at Phase 04 whether EVM integration is
+needed; no future module in the diagram is currently approved for coding.
 
 ```mermaid
 flowchart TB
@@ -13,7 +16,7 @@ flowchart TB
   Comet -->|localhost ABCI socket| App[internal/app: ABCI++ lifecycle]
   App --> State[internal/store: canonical state and SHA-256 AppHash]
   State --> Pebble[Pebble v1.1.5: synced committed record]
-  Future[Future transactions / EVM / hybrid] -. not implemented .-> App
+  Future[Future B0-Core / conditional EVM / hybrid] -. not implemented .-> App
 ```
 
 CometBFT owns consensus, validator signing, P2P, block construction and the
@@ -112,18 +115,23 @@ flowchart LR
 
 Future Pluto transaction handling must separate canonical bytes, secp256k1
 and ML-DSA-44 authentication of the same intent, account/key binding,
-state-dependent validity, sequential EVM execution, persistent state and
-AppHash. `HYBRID_REQUIRED` must fail closed. Consensus-critical results may
-not depend on local clocks, CPU budgets, queue occupancy, caches, scheduling
-or mempool arrival order. No future modules are implemented now.
+state-dependent validity, persistent state and AppHash. If Phase 04 approves
+EVM, its first execution model is sequential. `HYBRID_REQUIRED` must fail
+closed. Consensus-critical results may not depend on local clocks, CPU
+budgets, queue occupancy, caches, scheduling or mempool arrival order. No
+future modules are implemented now.
 
 The node is localhost-only by default but has signing keys and is not hardened
 for hostile networks. Genesis and Pluto metadata are checked on startup;
 deleting or modifying one side's database must not trigger an implicit reset.
 No arbitrary crash campaign, state sync, migration or multi-validator test has
 been done. `example.com/pluto` remains a provisional local module path.
+Phase 02R observed that `Run` does not compare the current CometBFT
+`config.toml` listener/proxy addresses with the Pluto metadata generated at
+`init`; operators must protect and review that file before each run. The
+existing checks do not prove cross-store crash recovery or power-loss safety.
 
-## Historical Phase 01 proposal (superseded where implemented above)
+## Historical Phase 01 proposal (superseded by implementation and D-019 where applicable)
 
 # Pluto target architecture (Phase 01)
 

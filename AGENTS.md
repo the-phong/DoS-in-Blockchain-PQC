@@ -1,6 +1,36 @@
 # Pluto agent execution contract
 
-## Current Phase 02 review handoff (supersedes historical phase status below)
+## Current authority — Phase 02R (2026-10-23)
+
+Phase 02R is authorized for independent audit, verification, governance
+reconciliation, evidence, normal commits and pushes on the dedicated
+`phase/02r-audit-governance` branch, and a Draft PR targeting `test-mainet`.
+Runtime fixes and Phase 03A or later implementation are not authorized. The
+Phase 02 implementation remains the transaction-free single-validator
+baseline. The Phase 02R report is a review request, not an approval or merge.
+
+ChatGPT acts as technical controller; the Coding Agent performs engineering
+work. The project owner approves phase transitions and performs or explicitly
+approves merges. Agent-controller technical communication, source documents
+and reports are in English. The controller provides explanations and decision
+requests to the owner in Vietnamese.
+
+Every authorized phase uses its own branch from the verified `test-mainet`
+baseline. Normal commits and pushes are permitted within that phase's scope;
+open a Draft PR against `test-mainet`. Never push directly to `test-mainet` or
+`master`, merge automatically, force-push, or start another phase without
+separate approval. Preserve unrelated local work. End every execution with a
+full report including source/result commit SHAs, branch, PR URL or blocker,
+verification and limitations, then STOP. A passing report never grants the
+next phase.
+
+The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
+03E before the Phase 04 decision on whether sequential EVM integration is
+necessary. EVM is optional pending that decision; if approved, execution must
+begin sequentially. Phases 03A–14 remain future work until separately
+authorized. Do not design admission optimization before Phase 11 profiling.
+
+## Historical Phase 02 review handoff (superseded by Phase 02R authority)
 
 Phase 02 — CometBFT Foundation is authorized and implemented for independent
 review. The repository now contains a real single-validator, empty-block
@@ -9,11 +39,14 @@ is **not authorized**. An agent may work only within an explicitly authorized
 phase; the Phase 02 report is not approval for Phase 03. No transaction
 execution, EVM, hybrid authentication or admission optimization exists.
 
-The user's local-only decision supersedes the original Phase 02 Git checkpoint:
-do not require or create commits, branches, remotes, Git identity or pushes.
+For Phase 02, the user's local-only decision superseded its original Git
+checkpoint: no commits, branches, remotes, Git identity or pushes were
+required or created during that phase. D-018 supersedes this policy for newly
+authorized phases while preserving that historical fact.
 Phase 01 baseline checksums are in `research/evidence/phase_02/` and the
-Phase 01 report/evidence must remain preserved. Record further changes in
-research governance documents and evidence, not by claiming a Git revision.
+Phase 01 report/evidence must remain preserved. The then-current instruction
+recorded further changes in research governance documents and evidence without
+claiming a Git revision; D-018 supersedes that instruction for new phases.
 
 For Phase 02 verification run `make verify`, `make test-integration`, and the
 relevant race test. The application is transaction-free and all unsupported
@@ -29,11 +62,11 @@ invalid workloads in a custom CometBFT-based EVM application. The repository
 currently contains a Phase 02 transaction-free single-validator chain, not an
 EVM or hybrid blockchain.
 
-## Phase authority
+## Historical Phase 02 authority (superseded)
 
-Active authorized phase: **02 — CometBFT Foundation**, for review and any
-authorized Phase 02 rework only. An agent may work only within the explicitly
-authorized phase. Phase 03 remains unapproved. Necessary work outside
+The then-active authorized phase was **02 — CometBFT Foundation**, for review
+and authorized Phase 02 rework only. An agent may work only within the
+explicitly authorized phase. Phase 03 remains unapproved. Necessary work outside
 the active phase must be documented and reported, never silently implemented.
 Do not infer approval from a PASS verdict or from roadmap text.
 
@@ -42,10 +75,11 @@ Do not infer approval from a PASS verdict or from roadmap text.
 - CometBFT owns consensus, P2P, block coordination and its mempool. Pluto owns
   application transactions, authentication, account policy, state, EVM
   execution and AppHash. Do not modify CometBFT consensus algorithms.
-- The target is a custom Go EVM application on CometBFT. Do not add Cosmos SDK
-  without an explicit recorded decision.
-- Preserve sequential EVM execution as the initial baseline. Do not design an
-  admission optimization before Phase 11 profiling justifies it.
+- The historical target was a custom Go EVM application on CometBFT. D-019
+  makes EVM conditional at Phase 04. Do not add Cosmos SDK without an
+  explicit recorded decision.
+- If EVM is approved, preserve sequential execution as its initial baseline.
+  Do not design an admission optimization before Phase 11 profiling justifies it.
 - Consensus-critical results must be deterministic for the same relevant
   committed state and proposal. Never use local clocks, queue size, CPU
   budgets, nonreplicated caches, scheduling or mempool arrival order as
@@ -82,5 +116,5 @@ Do not infer approval from a PASS verdict or from roadmap text.
   report and `research/evidence/` as appropriate. Record revision, toolchain,
   workload seeds, hardware and configuration for later experiments.
 - A phase report is an engineering claim for independent review, not approval.
-  Stop at the end of Phase 02 after its report. Record the reviewer's decision
-  before starting Phase 03.
+  Stop at the end of Phase 02R after its report. Record the reviewer's and
+  owner's decision before starting Phase 03A.

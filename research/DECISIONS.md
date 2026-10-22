@@ -1,5 +1,43 @@
 # Architectural decision log
 
+## Phase 02R approved governance and roadmap decisions (2026-10-23)
+
+**D-018 — Phase-Based Git Governance.** Context: D-011 correctly records the
+owner's local-only exception for Phase 02, but Phase 02R has an explicit new
+Git workflow. Alternatives: continue local checksums only; commit directly
+to an integration branch; one isolated branch and Draft PR per authorized
+phase. Selected: branch from the verified `origin/test-mainet` baseline,
+commit and push only approved-scope changes to the phase branch, and open a
+Draft PR targeting `test-mainet`. The owner performs or explicitly approves
+merges; agents never merge automatically, push directly to `test-mainet` or
+`master`, rewrite shared history, or infer a new phase from a PASS verdict.
+The Coding Agent reports to the ChatGPT technical controller in English;
+the controller communicates decisions to the owner in Vietnamese. Each
+execution ends with evidence, a full report and STOP. Rationale: reviewable
+history and controlled integration. Risks: branch protection may be absent;
+Git authentication and an authorized existing author identity are required.
+Status: **Accepted by owner for Phase 02R and future separately authorized
+phases**, superseding D-011 prospectively only. D-011 and its checksum
+evidence remain historically true. Verification: Phase 02R records the
+remote source SHA, branch, resulting commit and Draft PR or exact blocker.
+
+**D-019 — B0-Core First, EVM Decision at Phase 04.** Context: the earlier
+14-phase plan assumed EVM was mandatory before hybrid work. Alternatives:
+integrate EVM unconditionally before B0-Core; complete B0-Core first and
+decide whether EVM is needed at Phase 04. Selected: Phase 03A–03E build and
+validate the minimal classical B0-Core, including single-node and
+four-validator validation, before Phase 04. Phase 04 records a separate
+research and implementation decision; sequential EVM integration occurs
+only if approved. A no-go is not a permanent rejection of EVM. Rationale:
+establish a smaller correctness baseline and avoid adding unneeded execution
+complexity before the research need is known. Risks: a later EVM decision may
+require additional state/transaction mapping and migration work. Status:
+**Accepted by owner as Master Roadmap v2 planning**; no Phase 03A or Phase 04
+implementation is authorized. Verification: roadmap, architecture, status
+and manifest state B0-Core-first and conditional EVM; later gate records the
+actual go/no-go and evidence. D-004 and D-006 remain historical candidate
+and conditional sequential-execution guidance.
+
 ## Phase 02 accepted decisions (2026-10-15)
 
 **D-011 — Local baseline replaces Git checkpoint.** Context: user chose local

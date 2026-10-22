@@ -1,5 +1,50 @@
 # Architectural decision log
 
+## Phase 03A protocol proposals (2026-10-23; review pending)
+
+The owner authorized **specification work only**. The decisions below are
+**Proposed**, not owner-accepted implementation decisions. Their exact rules,
+alternatives, rationale and open questions are in `research/specs/` and the
+Phase 03A report. Phase 03B requires separate approval after review.
+
+**D-020 — B0 classical transaction V1 (Proposed).** Select a fixed binary,
+versioned, chain-bound value-transfer wire format with compressed secp256k1
+public key, `uint64` amount/nonce, compact low-S ECDSA signature, SHA-256
+domain-separated signed intent, SHA-256-derived 20-byte account address and
+separate domain-separated TxID. Alternatives considered: Ethereum transaction
+encoding/address rules, DER signatures, an independent sender-address field,
+fees/gas/memo/expiry fields and variable-length encodings. Rationale: a small
+unambiguous B0 correctness baseline with one sender identity. Trade-offs:
+fee-free operation has no economic spam deterrent; addresses are not Ethereum
+compatible; future fields require a new version. Status: **Proposed, not
+accepted**. Verification: no transaction bytes or cryptographic vectors were
+generated or executed in Phase 03A.
+
+**D-021 — B0 account state and AppHash V2 (Proposed).** Select checked
+`uint64` balances, nonces and supply, sorted 20-byte accounts, sequential
+value transfers, no fees/mint/burn, and a SHA-256 commitment to version,
+chain ID, height, supply and all accounts. New B0 chains use canonical V2
+genesis bytes; Phase 02 V1 homes have no implicit migration. Alternatives:
+Merkle/trie state root, account deletion, automatic migration and unordered
+storage hashing. Rationale: independently reproducible state transitions
+before optional EVM work. Trade-offs: flat commitment has no account proof
+and may be costly at scale; physical atomic persistence is future Phase 03C
+work. Status: **Proposed, not accepted**. Verification: specification review
+and arithmetic/length checks only; no V2 state exists in code.
+
+**D-022 — B0 ABCI validity policy (Proposed).** Select conservative
+committed-state `CheckTx`, deterministic sequential validation of the full
+proposal in `ProcessProposal`, and one ordered result per decided transaction
+in `FinalizeBlock`, with invalid decided transactions skipped without state
+effect. Keep pending state until synced `Commit`. Alternatives: trusting local
+admission, accepting all proposals, or aborting finalization on ordinary bad
+transaction bytes. Rationale: independent proposer-injection defense and
+deterministic fallback without unnecessary application halt. Trade-offs:
+strict proposal rejection may cost rounds under bad proposers; the anomalous
+decided-block fallback and fixed count/byte limits need independent review.
+Status: **Proposed, not accepted**. Verification: pinned v0.38.26 interface
+review only; current Phase 02 runtime still rejects all transactions.
+
 ## Phase 02R approved governance and roadmap decisions (2026-10-23)
 
 **D-018 — Phase-Based Git Governance.** Context: D-011 correctly records the

@@ -1,12 +1,14 @@
-# Phase 02R audit of the unchanged Phase 02 single-validator foundation.
+# Phase 03A specification work over the unchanged Phase 02 implementation.
 # This is a tested development configuration, not a performance experiment.
 project:
   name: Pluto
   research_title: Evaluation of Resource Cost and Processing Correctness for Hybrid secp256k1–ML-DSA-44 Transactions in a CometBFT-Based Blockchain Application under Deliberately Invalid Input Workloads
-  phase: "02R"
+  phase: "03A"
   implementation_status: single_validator_empty_block_foundation
-  phase_03_authorized: false
+  phase_03a_specification_authorized: true
+  phase_03b_implementation_authorized: false
   evm_decision: conditional_phase_04_after_b0_core
+  b0_protocol_status: proposed_pending_controller_owner_review
 application:
   version: 0.2.0-foundation
   state_format_version: 1
@@ -14,9 +16,9 @@ application:
   module_path_status: provisional_migration_required
 source:
   source_branch: test-mainet
-  source_commit: 0012ac53666dc3e541fcad431a946005058df1ef
-  working_branch: phase/02r-audit-governance
-  result_commit: recorded_in_phase_02r_final_chat_and_draft_pr
+  source_commit: ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab
+  working_branch: phase/03a-tx-protocol
+  result_commit: recorded_in_phase_03a_final_chat_and_draft_pr
   phase_01_baseline_manifest: research/evidence/phase_02/BASELINE_SHA256.txt
   phase_02_source_manifest: research/evidence/phase_02/RESULT_SHA256.txt
 toolchain:
@@ -54,9 +56,9 @@ build:
   configuration: standard_go_compiler_with_revision_ldflag
   binaries: build/plutod_and_build/cometbft
 verification:
-  status: phase_02r_independent_checks_passed_controller_review_pending
-  suite: make_verify_make_test-integration_race_and_requested_direct_checks
-  evidence: research/evidence/phase_02r/
+  status: phase_03a_required_checks_passed_protocol_review_pending
+  suite: git_diff_check_make_verify_make_test-integration
+  evidence: research/evidence/phase_03a/
   limitations: graceful_restart_only_no_power_loss_or_four_validator_test
 experiments:
   status: not_applicable

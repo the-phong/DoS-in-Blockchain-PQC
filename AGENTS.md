@@ -1,13 +1,17 @@
 # Pluto agent execution contract
 
-## Current authority — Phase 02R (2026-10-23)
+## Current authority — Phase 03A (2026-10-23)
 
-Phase 02R is authorized for independent audit, verification, governance
-reconciliation, evidence, normal commits and pushes on the dedicated
-`phase/02r-audit-governance` branch, and a Draft PR targeting `test-mainet`.
-Runtime fixes and Phase 03A or later implementation are not authorized. The
-Phase 02 implementation remains the transaction-free single-validator
-baseline. The Phase 02R report is a review request, not an approval or merge.
+The project owner explicitly authorized **Phase 03A — Classical Transaction
+Protocol Specification** after the Phase 02R merge. The coding agent may
+write protocol specifications, correctness invariants, test-vector plans,
+review evidence and necessary governance updates on the dedicated
+`phase/03a-tx-protocol` branch from verified `test-mainet`. It may commit,
+push and open a Draft PR targeting `test-mainet`. Phase 03A proposes rules
+for independent review; it does not accept them on the owner's behalf.
+Runtime changes, transaction/crypto implementation, EVM, hybrid mechanisms,
+consensus/mempool changes and Phase 03B or later work are **not authorized**.
+The implemented Phase 02 architecture remains the transaction-free baseline.
 
 ChatGPT acts as technical controller; the Coding Agent performs engineering
 work. The project owner approves phase transitions and performs or explicitly
@@ -27,8 +31,18 @@ next phase.
 The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
 03E before the Phase 04 decision on whether sequential EVM integration is
 necessary. EVM is optional pending that decision; if approved, execution must
-begin sequentially. Phases 03A–14 remain future work until separately
-authorized. Do not design admission optimization before Phase 11 profiling.
+begin sequentially. Phase 03A alone is now authorized; 03B–14 remain future
+work until separately authorized. Do not design admission optimization before
+Phase 11 profiling.
+
+## Historical Phase 02R authority (superseded by owner Phase 03A decision)
+
+Phase 02R was authorized for independent audit, verification, governance
+reconciliation and a Draft PR on `phase/02r-audit-governance`. Its report did
+not itself authorize Phase 03A. At that time, Phase 03A implementation was
+unapproved. The subsequent explicit owner decision above supersedes that
+status for specification work only; the Phase 02R report and evidence remain
+preserved.
 
 ## Historical Phase 02 review handoff (superseded by Phase 02R authority)
 
@@ -116,5 +130,5 @@ Do not infer approval from a PASS verdict or from roadmap text.
   report and `research/evidence/` as appropriate. Record revision, toolchain,
   workload seeds, hardware and configuration for later experiments.
 - A phase report is an engineering claim for independent review, not approval.
-  Stop at the end of Phase 02R after its report. Record the reviewer's and
-  owner's decision before starting Phase 03A.
+  Stop at the end of Phase 03A after its report. Record the controller's and
+  owner's decision before starting Phase 03B.

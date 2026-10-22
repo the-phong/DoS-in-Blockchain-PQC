@@ -7,6 +7,12 @@ to that investigation? No finding or publication
 outcome is presumed. Every phase requires a separate human authorization;
 finishing one phase does not authorize the next.
 
+**Current execution authority (2026-10-23):** The owner has explicitly
+authorized Phase 03A specification work on `phase/03a-tx-protocol` after the
+Phase 02R merge. Its protocol documents are proposals pending review, not
+implemented or owner-accepted rules. Phase 03B and all later implementation
+remain unauthorized.
+
 The method is: protocol specification → correctness oracle → functional
 implementation → adversarial testing → instrumentation → baseline measurement
 → root-cause analysis → conditional mechanism design → comparative evaluation

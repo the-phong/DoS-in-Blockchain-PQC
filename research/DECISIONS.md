@@ -1,0 +1,257 @@
+# Architectural decision log
+
+## Phase 02 accepted decisions (2026-10-15)
+
+**D-011 — Local baseline replaces Git checkpoint.** Context: user chose local
+development without Git identity, commits, branches or remote. Alternatives:
+Git baseline; no traceability; SHA-256 file manifest. Selected: checksums of
+the 16 existing nonsecret source/config/documentation files in
+`research/evidence/phase_02/BASELINE_SHA256.txt`, generated and verified before
+Phase 02 edits. Rationale: reproducible Phase 01 checkpoint without invented
+identity. Risk: no history/diff machinery; preserve original report/evidence
+and use this manifest plus the Phase 02 report. Status: **Accepted** by user.
+Verification: `sha256sum -c` passed at baseline; the old commit requirement was
+superseded, never fulfilled.
+
+**D-012 — CometBFT v0.38.26.** Context: v1.0.0 was only a historical candidate.
+Alternatives: v1.0.0, v0.38.26, v0.40.0. Selected: exact v0.38.26, pinned in
+`go.mod` and built as `build/cometbft`; module checksum retained in `go.sum`.
+Rationale: v1.0.0 is affected by published ASA-2025-001/002; the 0.38 line
+has patches for [ASA-2025-003][asa003] (0.38.19) and
+[CSA-2026-001 Tachyon][tachyon] (0.38.21); v0.38.26 is later than these fixes.
+v0.40.0 requires Go 1.25, above local Go 1.24.1. v0.38.26 declares Go
+1.22.11. Trade-offs: v0.38's ABCI API differs from Phase 01's v1.0.0
+reference; security is not proven merely by a patched version or build.
+Status: **Accepted for Phase 02 local development**. Verification: module
+download, `go build`, actual ABCI integration, live block production and
+restart; [release][comet038release], [ASA-2025-001][asa001],
+[ASA-2025-002][asa002], [ASA-2025-003][asa003], [Tachyon][tachyon].
+
+**D-013 — Separate pinned CometBFT child and Pluto ABCI socket.** Context:
+need a real node with small integration surface. Alternatives: in-process node;
+external arbitrary binary; bundled exact-version child. Selected: `plutod`
+starts its adjacent `cometbft` binary and a localhost ABCI socket server.
+Rationale: CometBFT's own init/node CLI gives valid validator configuration,
+while Pluto owns application lifecycle. Trade-offs: two processes and startup
+coordination; no public bindings by default. Status: **Accepted**. Verified by
+live RPC and restart integration test.
+
+**D-014 — Pebble v1.1.5 and commit boundary.** Context: durable minimal state.
+Alternatives: Pebble, flat file atomic rename, SQL. Selected: exact Pebble
+v1.1.5, one versioned state key, `Set(..., pebble.Sync)` only in `InitChain`
+for genesis and `Commit` for blocks. `FinalizeBlock` remains memory-only.
+Rationale: single-key atomicity, synced WAL, exclusive writable directory;
+also the provisional version reviewed in Phase 01. Trade-offs: no general
+multi-key transaction or arbitrary-power-loss proof; CometBFT/application
+cross-store atomicity relies on ABCI replay. Status: **Accepted**. Verified by
+reload, finalize-without-commit, exclusive-open and restart tests; storage
+version is pinned in `go.mod`.
+
+**D-015 — Canonical state digest.** Context: deterministic Phase 02 AppHash.
+Alternatives: JSON hash, Merkle tree, fixed binary SHA-256. Selected: SHA-256
+with `PLUTO/APP_STATE/V1` NUL-terminated domain, big-endian version, chain-ID
+length and bytes, and height; versioned persisted record with recomputation on
+reload. Empty blocks advance height and hash. Rationale: portable and
+testable, no unordered maps. Trade-off: not an Ethereum trie root and must be
+versioned when adding state. Status: **Accepted**. Verified by canonical
+encoding tests and two-instance deterministic replay.
+
+**D-016 — Genesis and node configuration.** Context: reproducible developer
+chain. Alternatives: hand-written validator/genesis; CometBFT init. Selected:
+bundled `cometbft init`, validated chain ID, initial height 1, empty app
+state, generated single validator, localhost listeners and one-second empty
+blocks. Init refuses an existing home; start checks Pluto metadata against
+genesis. Trade-offs: generated private keys require protection; port collision
+and file-system errors still require operator intervention. Status:
+**Accepted**. Verified by live init/start, RPC and restart test.
+
+**D-017 — Out-of-scope transactions.** Context: Phase 02 has no transaction
+semantics. Alternatives: accept no-op txs; reject all. Selected: `CheckTx`
+code 1, empty proposer output, deterministic proposal rejection for nonempty
+txs, `FinalizeBlock` error if they somehow reach it. Rationale: fail closed,
+never claim execution. Trade-off: no workload submission until Phase 03.
+Status: **Accepted**. Verified by ABCI lifecycle tests.
+
+[comet038release]: https://github.com/cometbft/cometbft/releases/tag/v0.38.26
+[asa001]: https://github.com/cometbft/cometbft/security/advisories/GHSA-22qq-3xwm-r5x4
+[asa002]: https://github.com/cometbft/cometbft/security/advisories/GHSA-r3r4-g7hq-pq4f
+[asa003]: https://github.com/cometbft/cometbft/security/advisories/GHSA-hrhf-2vcr-ghch
+[tachyon]: https://github.com/cometbft/cometbft/security/advisories/GHSA-c32p-wcqj-j677
+
+## Historical Phase 01 decisions (future candidates superseded where noted)
+
+Decision status describes authorization for this foundation, not experimental
+validation. `Accepted` decisions apply in Phase 01; future integration details
+remain `Proposed`. Changing an accepted decision requires a new dated entry
+with a reason and verification plan. Observations were made on 2026-10-15.
+
+## D-001 — Go application language
+
+- **Context:** A new custom CometBFT application needs a maintainable systems
+  language and reproducible modules.
+- **Alternatives:** Go; Rust with an ABCI bridge; a framework in another language.
+- **Selected:** Go module with a declared Go 1.24.0 minimum; observed local
+  toolchain is Go 1.24.1 on linux/amd64.
+- **Rationale:** Direct access to candidate CometBFT and geth Go APIs with
+  simple build/test tooling.
+- **Risks/trade-offs:** The minimum may need adjustment after dependency
+  integration; runtime and compiler versions affect later measurements.
+- **Status:** Accepted for Phase 01.
+- **Verification:** `go version`, `go build`, `go test`, and `go vet` are run in
+  Phase 01; no future dependency combination is yet compiled.
+
+## D-002 — CometBFT consensus foundation
+
+- **Context:** The target research needs Byzantine fault tolerant ordering and
+  ABCI++ application callbacks.
+- **Alternatives:** CometBFT; another BFT engine; custom consensus.
+- **Selected:** CometBFT, with v1.0.0 as the initial **provisional integration
+  target**, matching the historical plan.
+- **Rationale:** The [v1.0.0 ABCI++ methods][abci-methods] and
+  [requirements][abci-requirements] explicitly describe the lifecycle under
+  study. No consensus algorithm changes are permitted.
+- **Risks/trade-offs:** Phase 02 must check API compatibility, security support,
+  mempool configuration, liveness and replay behavior at the pinned tag. A
+  newer patch line may be preferable after review; it must be recorded.
+- **Status:** Accepted engine; exact version Proposed.
+- **Verification:** Official release tag and module path
+  `github.com/cometbft/cometbft` exist; v1.0.0 declares `go 1.23.1` in
+  [go.mod][comet-mod]. No Pluto integration test exists.
+
+## D-003 — Custom application, not Cosmos SDK
+
+- **Context:** The study needs explicit transaction representation and
+  application-level validation controls.
+- **Alternatives:** Custom ABCI++ application; Cosmos SDK application.
+- **Selected:** Custom Go application using CometBFT; no Cosmos SDK dependency.
+- **Rationale:** Preserves a clear research boundary and avoids claiming SDK
+  semantics or compatibility that do not exist.
+- **Risks/trade-offs:** More state, RPC, and EVM integration work is owned by
+  Pluto. Adoption of the SDK would require an explicit later decision.
+- **Status:** Accepted.
+- **Verification:** Phase 01 `go.mod` has no SDK dependency; future behavior is
+  architectural, not verified.
+
+## D-004 — EVM library boundary
+
+- **Context:** The target chain requires EVM execution but not a new EVM.
+- **Alternatives:** go-ethereum execution components; another EVM library;
+  implementing EVM semantics from scratch.
+- **Selected:** Propose go-ethereum v1.16.8 behind `internal/evm`, with a
+  sequential baseline and explicit transaction-to-message mapping.
+- **Rationale:** Historical reference version; official [release][geth-release]
+  and [go.mod][geth-mod] are available. The tag declares `go 1.24.0`.
+- **Risks/trade-offs:** Exact APIs, state root semantics, receipts, gas, fork
+  rules, licensing and compatibility with the ABCI state model need testing.
+- **Status:** Proposed for Phase 04; no dependency added in Phase 01.
+- **Verification:** Module path `github.com/ethereum/go-ethereum` and Go
+  directive observed at tag. Combined build and execution are unverified.
+
+## D-005 — Application storage and commitment
+
+- **Context:** Durable state and deterministic AppHash are needed later.
+- **Alternatives:** Pebble; another key/value engine; embedded SQL.
+- **Selected:** Propose Pebble v1.1.5 as a candidate storage engine because
+  geth v1.16.8 already requires that exact v1 module. Keep AppHash definition
+  separate from engine selection.
+- **Rationale:** Avoid an avoidable v1/v2 module split during first integration.
+  Official [Pebble go.mod][pebble-mod] confirms module path
+  `github.com/cockroachdb/pebble` and Go 1.20 directive.
+- **Risks/trade-offs:** Pebble v1 lifecycle and geth's storage use need review;
+  app-level atomicity, recovery and state commitment are unresolved. Pebble
+  bytes alone are not an authenticated state root.
+- **Status:** Proposed for later phases.
+- **Verification:** Module metadata and geth requirement inspected; no Pluto
+  storage code or crash test exists.
+
+## D-006 — Sequential execution baseline
+
+- **Context:** EVM parallelism would confound hybrid-authentication costs.
+- **Alternatives:** Sequential execution; parallel scheduling from inception.
+- **Selected:** Sequential EVM execution as the initial functional baseline.
+- **Rationale:** Establishes an interpretable correctness oracle and comparable
+  performance baseline before optimization.
+- **Risks/trade-offs:** Limits initial throughput; implementation still needs
+  deterministic state ordering and replay checks.
+- **Status:** Accepted research constraint.
+- **Verification:** No EVM exists yet; not experimentally verified.
+
+## D-007 — Transaction format belongs to Pluto
+
+- **Context:** Standard Ethereum raw transactions have no defined Pluto
+  ML-DSA-44 authentication field.
+- **Alternatives:** Custom versioned envelope; modify geth transaction types;
+  pretend standard raw Ethereum RPC carries both proofs.
+- **Selected:** Pluto will specify a versioned canonical application envelope
+  and explicit RPC semantics in later protocol work.
+- **Rationale:** Makes the signed intent and authentication policy auditable
+  without claiming Ethereum wire compatibility.
+- **Risks/trade-offs:** Wallet tooling and hash/receipt mapping require work;
+  byte encoding, domain, replay protection and account binding are undecided.
+- **Status:** Accepted ownership boundary; exact format Proposed.
+- **Verification:** No encoding or signature code exists in Phase 01.
+
+## D-008 — Dependency version policy
+
+- **Context:** Experimental results must map to exact source revisions.
+- **Alternatives:** Floating latest versions; early unused dependencies;
+  pin dependencies when first imported.
+- **Selected:** Use Go modules; add exact dependency versions only when used.
+  Record candidates separately from actual `go.mod` requirements. Review
+  releases, security advisories and toolchain constraints before adoption.
+- **Rationale:** Phase 01 builds without network access and avoids a false
+  appearance of tested compatibility.
+- **Risks/trade-offs:** Candidate versions may change at their phase gate;
+  comparisons must record the decision and migration.
+- **Status:** Accepted.
+- **Verification:** Phase 01 `go.mod` uses only the standard library and has no
+  `go.sum`; `go mod verify` is run in the foundation check.
+
+## D-009 — Reproducible research record
+
+- **Context:** Correctness and cost claims require independent reproduction.
+- **Alternatives:** Informal notes; versioned plan, manifest, evidence and
+  phase reports.
+- **Selected:** Version the plan, decisions, architecture, manifest and
+  completion report. Later experiments must record commit, toolchain, flags,
+  node configuration, hardware, workload seeds and raw results.
+- **Rationale:** Separates observed facts from plans and preserves review gates.
+- **Risks/trade-offs:** Manual metadata can drift; future tooling should
+  generate and validate experiment manifests.
+- **Status:** Accepted.
+- **Verification:** Required documents and Phase 01 execution evidence will be
+  reviewed at the phase gate; no experiment is claimed.
+
+## D-010 — Cryptographic library candidate
+
+- **Context:** Future hybrid authentication needs a FIPS 204-compatible
+  ML-DSA-44 implementation and classical secp256k1 verification.
+- **Alternatives:** CIRCL; another vetted ML-DSA implementation; new primitive
+  implementation (disallowed). Geth's existing secp256k1 stack versus a
+  separate library.
+- **Selected:** Propose CIRCL v1.6.4 for later evaluation; use geth's existing
+  secp256k1 dependency path where its API meets the protocol spec. Neither is
+  imported now.
+- **Rationale:** CIRCL documents an [ML-DSA-44 package][circl-mldsa], and
+  [v1.6.4 go.mod][circl-mod] declares Go 1.24.0. [v1.6.5][circl-newer]
+  declares Go 1.25.0,
+  exceeding the installed toolchain. Geth v1.16.8 requires
+  `github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1`.
+- **Risks/trade-offs:** FIPS mode, context handling, known-answer tests,
+  serialization and constant-time properties need a later cryptographic
+  review. A newer supported release may be selected with a toolchain change.
+- **Status:** Proposed for Phase 06.
+- **Verification:** The [ML-DSA-44 directory exists at v1.6.4][circl-tag-dir];
+  package documentation and module metadata inspected. No crypto API
+  compilation, vectors or security assessment performed.
+
+[abci-methods]: https://github.com/cometbft/cometbft/blob/v1.0.0/spec/abci/abci%2B%2B_methods.md
+[abci-requirements]: https://github.com/cometbft/cometbft/blob/v1.0.0/spec/abci/abci%2B%2B_app_requirements.md
+[comet-mod]: https://github.com/cometbft/cometbft/blob/v1.0.0/go.mod
+[geth-release]: https://github.com/ethereum/go-ethereum/releases/tag/v1.16.8
+[geth-mod]: https://github.com/ethereum/go-ethereum/blob/v1.16.8/go.mod
+[pebble-mod]: https://github.com/cockroachdb/pebble/blob/v1.1.5/go.mod
+[circl-mldsa]: https://pkg.go.dev/github.com/cloudflare/circl/sign/mldsa/mldsa44
+[circl-mod]: https://github.com/cloudflare/circl/blob/v1.6.4/go.mod
+[circl-newer]: https://github.com/cloudflare/circl/blob/v1.6.5/go.mod
+[circl-tag-dir]: https://github.com/cloudflare/circl/tree/v1.6.4/sign/mldsa/mldsa44

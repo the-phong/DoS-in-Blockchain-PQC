@@ -65,7 +65,7 @@ Environment: Go 1.24.1 linux/amd64, GNU Make 4.3, Git 2.34.1, WSL2 Ubuntu kernel
 | `go test -cover ./internal/app ./internal/store` | 0 | App 77.5%; store 88.2% statement coverage. |
 | `go test -tags integration ./test/integration -timeout 120s -count=1 -v` | 0 | One real-node test passed; one validator, zero txs, height 2 then recovered height 2 and height 4. |
 
-No command in this list was skipped. The test contains a conditional skip only for an ephemeral-port collision; it did not occur in the observed run. After documentation edits, `git diff --check`, `make verify`, `make test-integration` and a runtime-source unchanged check all exited 0; see [post-documentation verification](../evidence/phase_02r/post_documentation_verify.txt). CI workflow execution on GitHub is not claimed. Workload seeds and benchmark hardware measurements are not applicable: no workload or benchmark was run. Test timing and coverage are diagnostic, not performance or correctness proofs.
+No command in this list was skipped. The test contains a conditional skip only for an ephemeral-port collision; it did not occur in the observed run. After documentation edits, `git diff --check`, `make verify`, `make test-integration` and a runtime-source unchanged check all exited 0; see [post-documentation verification](../evidence/phase_02r/post_documentation_verify.txt). GitHub's push and PR `verify` checks on the first audit commit both completed successfully; the workflow ran `make verify` and `make test-integration`. Workload seeds and benchmark hardware measurements are not applicable: no workload or benchmark was run. Test timing and coverage are diagnostic, not performance or correctness proofs.
 
 ## 6. Findings and corrective work
 
@@ -96,11 +96,11 @@ D-018 prospectively replaces Phase 02's local-only workflow with one branch and 
 | G8 architecture preservation | PASS | No runtime/dependency/consensus/transaction/EVM/PQC source changes. |
 | G9 governance | PASS | D-018, D-019 and current authority/roadmap reconciled. |
 | G10 reproducibility | PASS | Exact source SHA, versions, environment, commands, outputs and limits in evidence. |
-| G11 Git isolation | PASS before publication | All edits on `phase/02r-audit-governance`; push/PR details in final chat and PR. No merge. |
+| G11 Git isolation | PASS | Branch pushed; Draft PR #2 targets `test-mainet`; integration branches unchanged. No merge. |
 | G12 phase discipline | PASS | No Phase 03A implementation; explicit STOP. |
 
 The gates make Phase 02R **eligible for independent controller review**, not owner acceptance. A future critical failure or repository rule rejection must revise the verdict. No approval for Phase 03A or Phase 04 follows from these results.
 
 ## 8. Git publication and final disposition
 
-Working branch: `phase/02r-audit-governance`; source commit: `0012ac53666dc3e541fcad431a946005058df1ef`. The exact result HEAD SHA, push result and Draft PR URL are recorded in the Phase 02R final chat report and PR after publication; a commit cannot embed its own final SHA in its contents. Merge: **NO**. Controller/owner review is the next action. Phase 03A authorization: **NOT GRANTED**. Execution stops after the final report.
+Working branch: `phase/02r-audit-governance`; source commit: `0012ac53666dc3e541fcad431a946005058df1ef`; first audit commit: `587a5164fba8847e2b7e03bf56fa7c6919faba9f`. Push: **SUCCESS**, branch only. Draft PR: <https://github.com/the-phong/DoS-in-Blockchain-PQC/pull/2>, base `test-mainet`, open and unmerged. The final HEAD SHA is recorded in the Phase 02R chat report and PR after this publication-metadata update; a commit cannot embed its own final SHA in its contents. Merge: **NO**. Controller/owner review is the next action. Phase 03A authorization: **NOT GRANTED**. Execution stops after the final report.

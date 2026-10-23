@@ -7,13 +7,13 @@ to that investigation? No finding or publication
 outcome is presumed. Every phase requires a separate human authorization;
 finishing one phase does not authorize the next.
 
-**Current execution authority (2026-10-23):** Phase 03B was completed,
-Controller-accepted and merged through PR #4 at
-`8be07c87abed73763d40252e99bbf0573da487b4`. The Owner accepted D-023.
-Only documentation closeout on `governance/03b-acceptance-closeout` is
-authorized. Phase 03C and all later work remain unauthorized; the Phase 02
-runtime still has no B0 transaction integration. The accepted B0 V1 rules and
-conditional Phase 04 EVM gate are unchanged.
+**Current execution authority (2026-10-23):** Phase 03C is authorized on
+`phase/03c-b0-state-persistence` from verified source
+`61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`. It builds isolated V2
+state and persistence only. Phase 03B and its D-023 acceptance are merged.
+Phase 03D and all later work remain unauthorized; the Phase 02 runtime still
+has no B0 transaction integration. The accepted B0 V1 rules and conditional
+Phase 04 EVM gate are unchanged.
 
 The method is: protocol specification → correctness oracle → functional
 implementation → adversarial testing → instrumentation → baseline measurement

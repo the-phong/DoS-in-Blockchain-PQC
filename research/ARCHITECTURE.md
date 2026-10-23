@@ -6,7 +6,7 @@ custom Go ABCI++ application connected by a localhost socket to a pinned
 CometBFT v0.38.26 child process. It is not an EVM or hybrid chain.
 Phase 02R retains this implementation. D-019 requires a complete minimal
 classical B0-Core before deciding at Phase 04 whether EVM integration is
-needed; no future module in the diagram is currently approved for coding.
+needed; only the isolated Phase 03C state subsystem is approved for coding.
 The owner has accepted Phase 03A's B0 V1 transaction and V2 logical-state
 specifications in `research/specs/` and D-020–D-022 after Controller rework.
 The subsequent explicit Phase 03B authorization permits a standalone
@@ -14,8 +14,14 @@ The subsequent explicit Phase 03B authorization permits a standalone
 ABCI implementation, Pebble record or AppHash V1.
 Phase 03B was completed, Controller-accepted and merged at
 `8be07c87abed73763d40252e99bbf0573da487b4`; D-023 is Owner-accepted.
-The governance closeout grants no Phase 03C implementation authority.
-The current runtime AppHash remains the Phase 02 V1 digest.
+The Owner then authorized Phase 03C from verified `test-mainet` SHA
+`61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`. Standalone
+`internal/b0state` provides canonical V2 genesis/state, ordered transaction
+simulation and AppHash V2. Standalone `internal/b0store` persists one complete
+V2 snapshot in a separate Pebble database with a synchronous write and an
+isolated pending candidate. D-024 is a proposed physical-layout decision.
+Neither package is imported by `internal/app` or `internal/node`; the current
+runtime AppHash remains the Phase 02 V1 digest. Phase 03D is unauthorized.
 
 ```mermaid
 flowchart TB
@@ -117,6 +123,8 @@ flowchart LR
   App --> Types[CometBFT ABCI types]
   Store --> Pebble[Pebble]
   Library[internal/tx: standalone B0 V1 codec and authentication]
+  B0[internal/b0state: isolated V2 state and transitions] --> Library
+  B0Store[internal/b0store: isolated V2 synced snapshot] --> B0
   CLI --> Version[internal/version]
   Hybrid[future internal/hybrid] -. canonical authentication .-> App
   EVM[future internal/evm] -. sequential execution .-> App
@@ -129,8 +137,9 @@ state-dependent validity, persistent state and AppHash. If Phase 04 approves
 EVM, its first execution model is sequential. `HYBRID_REQUIRED` must fail
 closed. Consensus-critical results may not depend on local clocks, CPU
 budgets, queue occupancy, caches, scheduling or mempool arrival order. No
-future account, hybrid or EVM modules are implemented. `internal/tx` is a
-standalone stateless Phase 03B library and is not imported by `internal/app`.
+hybrid or EVM modules are implemented. `internal/tx` is standalone Phase 03B;
+`internal/b0state` and `internal/b0store` are standalone Phase 03C packages.
+None is imported by `internal/app`.
 
 The node is localhost-only by default but has signing keys and is not hardened
 for hostile networks. Genesis and Pluto metadata are checked on startup;

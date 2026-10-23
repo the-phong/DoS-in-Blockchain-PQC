@@ -1,5 +1,24 @@
 # Architectural decision log
 
+## Phase 03C physical storage proposal (2026-10-23; pending Controller and Owner review)
+
+**D-024 — Isolated B0 V2 complete-snapshot persistence (Proposed).** Use a
+separate Pebble database directory selected by an explicit caller. Store one
+complete versioned record at key `pluto/committed-state/v2` as
+`ASCII("PLUTOS2!") || canonical_logical_state || AppHashV2`, replacing it with
+one `pebble.Sync` write per committed block. Opening validates the entire
+record, V2 version, chain context, account invariants and recomputed hash;
+the existing V1 key fails closed. Fresh initialization requires an absent
+directory and canonical Genesis V2. Alternatives: multi-key atomic batch,
+per-account updates, implicit migration of V1 data. A single record makes
+the commit boundary and corruption checks simple, at O(K) serialization,
+hashing and write cost for K accounts. A returned write error can leave the
+durable outcome uncertain; the store does not promote in-memory state and
+requires close/reopen validation before another candidate. This proposal
+does not claim physical power-loss durability from graceful restart tests.
+The existing Phase 02 store and live ABCI path are unchanged. **Status:
+Proposed, not Owner-accepted.** See the Phase 03C report and evidence.
+
 ## Phase 03B dependency decision (2026-10-23; Accepted by Owner)
 
 **D-023 — Stateless secp256k1 adapter dependency (Accepted by Owner on 2026-10-23).** Select

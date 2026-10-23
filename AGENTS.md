@@ -1,6 +1,21 @@
 # Pluto agent execution contract
 
-## Current authority — Phase 03B post-merge governance closeout (2026-10-23)
+## Current authority — Phase 03C (2026-10-23)
+
+The Owner explicitly authorized Phase 03C on
+`phase/03c-b0-state-persistence` from verified `test-mainet` SHA
+`61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`. The permitted work is an
+isolated B0 V2 account-state, genesis, transition, commitment and persistence
+subsystem, with tests and evidence. D-020–D-023 and the B0 V1 normative
+specifications are accepted and frozen. The Phase 02 ABCI node remains
+transaction-free: do not modify its live application, node, V1 store, genesis
+or AppHash behavior. Phase 03D and later work are not authorized. Commit and
+push only the Phase 03C branch, open a Draft PR against `test-mainet`, report
+all gates, and stop for Controller and Owner review. The proposed V2 physical
+storage layout requires separate Owner acceptance; this phase cannot accept
+it on the Owner's behalf.
+
+## Historical Phase 03B post-merge governance closeout (superseded by Phase 03C authority)
 
 The Owner accepted D-023 on 2026-10-23. Phase 03B PR #4 was merged into
 `test-mainet` at `8be07c87abed73763d40252e99bbf0573da487b4`; Phase 03B
@@ -56,8 +71,8 @@ next phase.
 The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
 03E before the Phase 04 decision on whether sequential EVM integration is
 necessary. EVM is optional pending that decision; if approved, execution must
-begin sequentially. Phase 03B alone is now authorized;
-03C–14 remain future work until separately authorized. Do not design admission
+begin sequentially. Phase 03C alone is now authorized;
+03D–14 remain future work until separately authorized. Do not design admission
 optimization before Phase 11 profiling.
 
 ## Historical Phase 02R authority (superseded by owner Phase 03A decision)

@@ -97,8 +97,10 @@ records fresh checks and limitations. The 14-phase [master plan](research/MASTER
 now places minimal B0-Core before a conditional Phase 04 EVM decision.
 Phase 03B is completed, Controller-accepted and merged through PR #4 at
 `8be07c87abed73763d40252e99bbf0573da487b4`; the Owner accepted D-023.
-Only documentation closeout is currently authorized. Phase 03C and later work
-are not. D-018 governs new work:
+Phase 03C is now authorized from `test-mainet` SHA
+`61bc65fdebf358fb0330cb9ebd4a332ca4a06aca` and adds isolated V2 state
+and persistence packages for review. The running node is still transaction-free.
+Phase 03D and later work are not authorized. D-018 governs new work:
 one approved phase per branch, Draft PRs to `test-mainet`, and owner-controlled
 merges. The Phase 02 local-only Git exception remains in historical records.
 
@@ -113,5 +115,9 @@ protocol and decisions D-020–D-022 after Controller rework. The accepted
 test requirements. Phase 03A PR #3 was merged into `test-mainet` at
 `54bf720ac4625c17eaa6101a8f398ef7c0663432`. Phase 03B now implements a
 standalone `internal/tx` library; the current binary still rejects all
-transactions. Phase 03B PR #4 is merged. Phase 03C is not authorized.
+transactions. Phase 03B PR #4 is merged. Phase 03C adds a standalone
+`internal/b0state` transition engine and `internal/b0store` V2 persistence
+adapter; neither is connected to the live ABCI application. See the
+[Phase 03C report](research/PHASE_REPORTS/PHASE_03C_REPORT.md) for verification
+and limitations.
 

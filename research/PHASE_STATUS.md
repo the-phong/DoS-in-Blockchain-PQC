@@ -1,6 +1,18 @@
 # Phase status — 2026-10-23
 
-## Current governance closeout after Phase 03B merge
+## Current Phase 03C implementation candidate
+
+The Owner authorized Phase 03C after the Phase 03B governance closeout merged
+into `test-mainet` at `61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`.
+Work on `phase/03c-b0-state-persistence` adds standalone V2 account state,
+genesis parsing, sequential simulation, AppHash and a separate Pebble store.
+The Phase 02 ABCI runtime still rejects every transaction and uses its V1
+record and AppHash. D-020–D-023 remain accepted and unchanged. D-024 proposes
+the physical V2 storage layout for Controller and Owner review; it is not yet
+accepted. Phase 03C completion is subject to evidence, CI and independent
+review. Phase 03D and all later phases are **NOT AUTHORIZED**.
+
+## Historical governance closeout after Phase 03B merge
 
 Phase 03B is **completed, Controller-accepted, and merged** via PR #4 into
 `test-mainet` at `8be07c87abed73763d40252e99bbf0573da487b4`. The Owner

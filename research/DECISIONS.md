@@ -1,6 +1,6 @@
 # Architectural decision log
 
-## Phase 03C physical storage proposal (2026-10-23; pending Controller and Owner review)
+## Phase 03C physical storage proposal (2026-10-23; Controller recommendation, pending Owner acceptance)
 
 **D-024 — Isolated B0 V2 complete-snapshot persistence (Proposed).** Use a
 separate Pebble database directory selected by an explicit caller. Store one
@@ -17,7 +17,10 @@ durable outcome uncertain; the store does not promote in-memory state and
 requires close/reopen validation before another candidate. This proposal
 does not claim physical power-loss durability from graceful restart tests.
 The existing Phase 02 store and live ABCI path are unchanged. **Status:
-Proposed, not Owner-accepted.** See the Phase 03C report and evidence.
+PROPOSED — AWAITING EXPLICIT OWNER ACCEPTANCE.** The Controller recommends
+this layout only as a correctness-oriented experimental B0 baseline, subject
+to the limitations in the [Phase 03C risk addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md).
+Any later storage change requires a separately versioned decision and tests.
 
 ## Phase 03B dependency decision (2026-10-23; Accepted by Owner)
 

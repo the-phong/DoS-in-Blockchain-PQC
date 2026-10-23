@@ -191,3 +191,17 @@ rewritten. Accepted D-020–D-023 rules, Phase 02 runtime, cryptography,
 dependencies, Genesis V2 and AppHash V2 remain unchanged. D-024 remains
 **Proposed**, and Phase 03D remains unauthorized. The new result commit and
 Draft PR #6 CI status are recorded in the Controller rework chat report.
+
+## Controller risk and acceptance addendum — 2026-10-23
+
+At the Owner's request, the [risk and acceptance addendum](../evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md)
+records Phase 03C's tested persistence boundary, the pinned CometBFT replay
+contract, and a cross-store recovery matrix whose B0 V2 cases remain
+unexecuted. It documents R2: `b0state.Evaluate` fully validates and hashes
+K accounts before cheap stateless rejection, creating an analytical O(K)
+cost per invalid call; no exploit or benchmark result is claimed. It defines
+future K=1/64/4096/65536 measurements and mandatory Phase 03D activation
+gates without implementing them. D-024 remains **PROPOSED — AWAITING EXPLICIT
+OWNER ACCEPTANCE**. This addendum does not alter the historical test record,
+accepted protocol specifications or live Phase 02 runtime; PR #6 remains
+Draft and Phase 03D remains unauthorized.

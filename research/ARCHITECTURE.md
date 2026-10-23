@@ -12,6 +12,9 @@ specifications in `research/specs/` and D-020–D-022 after Controller rework.
 The subsequent explicit Phase 03B authorization permits a standalone
 `internal/tx` stateless library. It does not change the transaction-free node,
 ABCI implementation, Pebble record or AppHash V1.
+Phase 03B was completed, Controller-accepted and merged at
+`8be07c87abed73763d40252e99bbf0573da487b4`; D-023 is Owner-accepted.
+The governance closeout grants no Phase 03C implementation authority.
 The current runtime AppHash remains the Phase 02 V1 digest.
 
 ```mermaid

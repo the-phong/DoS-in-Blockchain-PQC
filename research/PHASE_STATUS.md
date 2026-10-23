@@ -1,6 +1,18 @@
 # Phase status — 2026-10-23
 
-## Current Phase 03B execution
+## Current governance closeout after Phase 03B merge
+
+Phase 03B is **completed, Controller-accepted, and merged** via PR #4 into
+`test-mainet` at `8be07c87abed73763d40252e99bbf0573da487b4`. The Owner
+accepted D-023 on 2026-10-23; D-020–D-022 remain accepted and unchanged.
+Both post-merge GitHub verification runs passed. The only active authorization
+is documentation-only acceptance closeout on
+`governance/03b-acceptance-closeout`, with a Draft PR and Owner-controlled
+merge. Phase 03C is **NOT AUTHORIZED**. The running node remains the Phase 02
+transaction-free application; `internal/tx` is a standalone stateless library.
+Account state, AppHash V2 and ABCI transaction handling remain unimplemented.
+
+## Historical Phase 03B execution status (superseded by Controller acceptance and merge)
 
 The Owner accepted D-020–D-022 and merged Phase 03A PR #3 into `test-mainet`
 at `54bf720ac4625c17eaa6101a8f398ef7c0663432`. The Owner separately

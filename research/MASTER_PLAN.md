@@ -7,12 +7,13 @@ to that investigation? No finding or publication
 outcome is presumed. Every phase requires a separate human authorization;
 finishing one phase does not authorize the next.
 
-**Current execution authority (2026-10-23):** The owner accepted the Phase 03A
-B0 V1 specifications and D-020–D-022, merged PR #3 at
-`54bf720ac4625c17eaa6101a8f398ef7c0663432`, and separately authorized
-Phase 03B stateless transaction codec and secp256k1 implementation. Phase 03C
-and all later work remain unauthorized. Phase 02 runtime integration is not
-part of Phase 03B.
+**Current execution authority (2026-10-23):** Phase 03B was completed,
+Controller-accepted and merged through PR #4 at
+`8be07c87abed73763d40252e99bbf0573da487b4`. The Owner accepted D-023.
+Only documentation closeout on `governance/03b-acceptance-closeout` is
+authorized. Phase 03C and all later work remain unauthorized; the Phase 02
+runtime still has no B0 transaction integration. The accepted B0 V1 rules and
+conditional Phase 04 EVM gate are unchanged.
 
 The method is: protocol specification → correctness oracle → functional
 implementation → adversarial testing → instrumentation → baseline measurement

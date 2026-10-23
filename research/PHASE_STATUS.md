@@ -1,5 +1,18 @@
 # Phase status — 2026-10-23
 
+## Current Phase 03B execution
+
+The Owner accepted D-020–D-022 and merged Phase 03A PR #3 into `test-mainet`
+at `54bf720ac4625c17eaa6101a8f398ef7c0663432`. The Owner separately
+authorized Phase 03B on `phase/03b-classical-tx-crypto`. This phase implements
+and verifies a standalone stateless transaction library and public test
+vectors. The Phase 02 node still rejects all transactions; account state,
+AppHash V2 and ABCI integration are reserved for Phases 03C–03E. Phase 03C is
+not authorized. Completion and acceptance remain subject to Controller/Owner
+review of the Phase 03B report and Draft PR.
+
+## Historical Phase 03A closeout status (superseded by merger and 03B authorization)
+
 - **Active authorization:** Phase 03A documentation closeout only. The Owner
   authorized Phase 03A after Phase 02R was merged into `test-mainet` at
   `ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab`, then accepted the B0 V1

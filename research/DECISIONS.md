@@ -1,5 +1,28 @@
 # Architectural decision log
 
+## Phase 03B dependency decision (2026-10-23; implementation choice for review)
+
+**D-023 — Stateless secp256k1 adapter dependency.** Select
+`github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1` as the direct dependency
+for Phase 03B's compressed-point parsing, ECDSA verification over an already
+computed 32-byte digest, and deterministic test-only signing. It was already
+in the Phase 03A graph indirectly at v4.4.0; this is an explicit, reviewed
+update to v4.4.1, not a silent upgrade. The module's minimum Go version is
+1.17, below Pluto's 1.24.0. The module declares one direct dependency,
+`github.com/decred/dcrd/crypto/blake256 v1.1.0`, already present in Pluto's
+module graph; `go mod tidy` introduced no new module path. Module zip checksum:
+`h1:5RVFMOWjMyRy8cARdy79nAmgYw3hK/4HUq48LQ6Wwqo=`. Its
+`ModNScalar.SetByteSlice` reduces on overflow, so Pluto rejects overflow and
+zero **before** using the scalar for ECDSA; it also checks low-S explicitly.
+The public-key parser accepts other encodings at other lengths, so Pluto
+enforces exactly 33 bytes and prefix 02/03 before parsing. Alternatives:
+retain indirect v4.4.0; add a different secp256k1 stack; implement curve
+arithmetic locally. v4.4.1 is the latest version listed by the Go module
+index at selection time and supports the required prehashed ECDSA API.
+This adapter is isolated from the Phase 02 ABCI runtime. D-020–D-022 remain
+unchanged and accepted; Owner/Controller review of this dependency choice is
+pending with the Phase 03B Draft PR.
+
 ## Phase 03A B0 V1 protocol decisions (2026-10-23; accepted by owner)
 
 The owner authorized specification work and, after Controller R1–R5 rework,

@@ -8,10 +8,11 @@ outcome is presumed. Every phase requires a separate human authorization;
 finishing one phase does not authorize the next.
 
 **Current execution authority (2026-10-23):** The owner accepted the Phase 03A
-B0 V1 specifications and D-020–D-022 after Controller rework. Documentation
-closeout on the existing `phase/03a-tx-protocol` Draft PR is authorized; the
-accepted protocol is not implemented. Phase 03B and all later implementation
-remain unauthorized. The owner controls the Phase 03A PR merge.
+B0 V1 specifications and D-020–D-022, merged PR #3 at
+`54bf720ac4625c17eaa6101a8f398ef7c0663432`, and separately authorized
+Phase 03B stateless transaction codec and secp256k1 implementation. Phase 03C
+and all later work remain unauthorized. Phase 02 runtime integration is not
+part of Phase 03B.
 
 The method is: protocol specification → correctness oracle → functional
 implementation → adversarial testing → instrumentation → baseline measurement

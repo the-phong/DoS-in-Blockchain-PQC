@@ -59,3 +59,15 @@ controlled test seams; they do not model every operating-system failure. A
 subprocess test also terminates a disposable writer after Prepare or after a
 successful Commit, then reopens and validates the old or new complete
 snapshot respectively. It is an OS process-kill test, not a power-loss test.
+
+## Controller R1 addendum — 2026-10-23
+
+After a returned Pebble write error or post-sync response error, both
+`Committed()` and `Pending()` return `ErrUncertain` and no snapshot. Reads
+remain available after an explicitly pre-write failure because that hook ran
+before any write attempt. `Prepare()` and `Commit()` continue to reject
+uncertain state. Closing and reopening validates the complete persisted
+record and resolves whether the old or new snapshot became durable. The
+in-memory committed value is not promoted and pending is not discarded on a
+failed Commit response. See the separately appended R1 evidence; earlier
+execution logs are historical and unchanged.

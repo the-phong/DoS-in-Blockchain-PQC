@@ -2,6 +2,12 @@
 
 ## Current Phase 03C implementation candidate
 
+The Controller reviewed commit `6459a1ad7ee5a17994f484c04f47658a976d9ea6`
+and requested R1 rework on existing Draft PR #6: committed and pending reads
+must return `ErrUncertain` after an ambiguous write result. The correction is
+submitted on the same Phase 03C branch for renewed review. This is not Phase
+03C acceptance; D-024 remains Proposed and Phase 03D remains unauthorized.
+
 The Owner authorized Phase 03C after the Phase 03B governance closeout merged
 into `test-mainet` at `61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`.
 Work on `phase/03c-b0-state-persistence` adds standalone V2 account state,

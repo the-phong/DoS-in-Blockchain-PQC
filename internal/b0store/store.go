@@ -164,6 +164,9 @@ func (s *Store) Committed() (b0state.State, error) {
 	if s.closed {
 		return b0state.State{}, ErrClosed
 	}
+	if s.uncertain {
+		return b0state.State{}, ErrUncertain
+	}
 	return s.committed, nil // State exposes no mutable account slice.
 }
 
@@ -172,6 +175,9 @@ func (s *Store) Pending() (b0state.State, bool, error) {
 	defer s.mu.RUnlock()
 	if s.closed {
 		return b0state.State{}, false, ErrClosed
+	}
+	if s.uncertain {
+		return b0state.State{}, false, ErrUncertain
 	}
 	if s.pending == nil {
 		return b0state.State{}, false, nil

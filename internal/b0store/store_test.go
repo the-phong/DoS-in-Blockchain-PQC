@@ -188,11 +188,12 @@ func TestFaultBoundaries(t *testing.T) {
 	if err := s.Commit(); err == nil {
 		t.Fatal("expected prewrite error")
 	}
-	old, _ := s.Committed()
-	if old.Height() != 0 {
+	old, err := s.Committed()
+	if err != nil || old.Height() != 0 {
 		t.Fatal("promoted before write")
 	}
-	if _, yes, _ := s.Pending(); !yes {
+	prewritePending, yes, err := s.Pending()
+	if err != nil || !yes || prewritePending.Height() != 1 {
 		t.Fatal("lost pending after prewrite error")
 	}
 	if err := s.Commit(); err != nil {
@@ -222,9 +223,14 @@ func TestFaultBoundaries(t *testing.T) {
 	if err := s.Commit(); err == nil {
 		t.Fatal("expected postwrite error")
 	}
-	old, _ = s.Committed()
-	if old.Height() != 1 {
-		t.Fatal("promoted after reported failure")
+	if snapshot, err := s.Committed(); err != ErrUncertain || snapshot.ChainID() != "" || snapshot.AppHash() != ([32]byte{}) {
+		t.Fatal("committed read did not fail closed", err)
+	}
+	if snapshot, yes, err := s.Pending(); err != ErrUncertain || yes || snapshot.ChainID() != "" || snapshot.AppHash() != ([32]byte{}) {
+		t.Fatal("pending read did not fail closed", err)
+	}
+	if old.Height() != 0 || current.Height() != 1 || s.committed.Height() != 1 || s.pending == nil || s.pending.Height() != 2 {
+		t.Fatal("previous snapshots or internal pending/committed state changed unexpectedly")
 	}
 	if err := s.Commit(); err != ErrUncertain {
 		t.Fatal("uncertain retry", err)
@@ -284,6 +290,96 @@ func TestConcurrentCommittedReadsDuringCandidateLifecycle(t *testing.T) {
 	committed, _ := s.Committed()
 	if committed.Height() != 1 {
 		t.Fatal("commit missing")
+	}
+}
+
+func TestConcurrentReadersFailClosedOnUncertainCommit(t *testing.T) {
+	genesis, wire, _, _ := fixture(t)
+	dir := filepath.Join(t.TempDir(), "b0")
+	s, err := Create(dir, genesis, chain)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Close(); err != nil {
+		t.Fatal(err)
+	}
+	entered := make(chan struct{})
+	release := make(chan struct{})
+	s, err = OpenExistingWithOptions(dir, chain, Options{AfterSync: func() error {
+		close(entered)
+		<-release
+		return errors.New("injected post-sync response error")
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := s.Committed()
+	if err != nil || before.Height() != 0 {
+		t.Fatal("normal committed read", err)
+	}
+	if _, _, err := s.Prepare([][]byte{wire}); err != nil {
+		t.Fatal(err)
+	}
+	prepared, yes, err := s.Pending()
+	if err != nil || !yes || prepared.Height() != 1 {
+		t.Fatal("normal pending read", err)
+	}
+	commitResult := make(chan error, 1)
+	go func() { commitResult <- s.Commit() }()
+	select {
+	case <-entered:
+	case <-time.After(20 * time.Second):
+		close(release)
+		t.Fatal("post-sync hook was not reached")
+	}
+	const readers = 24
+	results := make(chan error, readers*2)
+	var group sync.WaitGroup
+	for i := 0; i < readers; i++ {
+		group.Add(1)
+		go func() {
+			defer group.Done()
+			committed, readErr := s.Committed()
+			if readErr != ErrUncertain || committed.ChainID() != "" {
+				results <- fmt.Errorf("committed read: %v", readErr)
+			}
+			pending, available, readErr := s.Pending()
+			if readErr != ErrUncertain || available || pending.ChainID() != "" {
+				results <- fmt.Errorf("pending read: %v", readErr)
+			}
+		}()
+	}
+	close(release)
+	if err := <-commitResult; err == nil {
+		t.Fatal("expected post-sync error")
+	}
+	group.Wait()
+	close(results)
+	for err := range results {
+		t.Error(err)
+	}
+	if before.Validate() != nil || prepared.Validate() != nil || before.Height() != 0 || prepared.Height() != 1 ||
+		s.committed.Height() != 0 || s.pending == nil || s.pending.Height() != 1 ||
+		s.committed.Validate() != nil || s.pending.Validate() != nil {
+		t.Fatal("snapshots mutated or pending candidate lost")
+	}
+	if _, _, err := s.Prepare(nil); err != ErrUncertain {
+		t.Fatal("uncertain prepare", err)
+	}
+	if err := s.Commit(); err != ErrUncertain {
+		t.Fatal("uncertain commit", err)
+	}
+	if err := s.Close(); err != nil {
+		t.Fatal(err)
+	}
+	reopened, err := OpenExisting(dir, chain)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer reopened.Close()
+	recovered, err := reopened.Committed()
+	if err != nil || recovered.Height() != 1 || recovered.AppHash() != prepared.AppHash() {
+		t.Fatal("reopen did not validate complete new snapshot", err)
 	}
 }
 
@@ -623,12 +719,20 @@ func TestLifecycleAndStorageErrorBranches(t *testing.T) {
 	if err := s.Commit(); err == nil {
 		t.Fatal("injected Set error accepted")
 	}
-	current, err := s.Committed()
-	if err != nil || current.Height() != 0 {
-		t.Fatal("promoted after Set error", err)
+	if snapshot, err := s.Committed(); err != ErrUncertain || snapshot.ChainID() != "" || snapshot.AppHash() != ([32]byte{}) {
+		t.Fatal("Set error committed read did not fail closed", err)
+	}
+	if snapshot, yes, err := s.Pending(); err != ErrUncertain || yes || snapshot.ChainID() != "" || snapshot.AppHash() != ([32]byte{}) {
+		t.Fatal("Set error pending read did not fail closed", err)
+	}
+	if s.committed.Height() != 0 || s.pending == nil || s.pending.Height() != 1 {
+		t.Fatal("Set error promoted or discarded candidate")
 	}
 	if err := s.Commit(); err != ErrUncertain {
 		t.Fatal("uncertain Set retry", err)
+	}
+	if _, _, err := s.Prepare(nil); err != ErrUncertain {
+		t.Fatal("uncertain Set prepare", err)
 	}
 	if err := s.Close(); err != nil {
 		t.Fatal(err)

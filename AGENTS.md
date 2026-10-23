@@ -14,6 +14,9 @@ push only the Phase 03C branch, open a Draft PR against `test-mainet`, report
 all gates, and stop for Controller and Owner review. The proposed V2 physical
 storage layout requires separate Owner acceptance; this phase cannot accept
 it on the Owner's behalf.
+Controller R1 rework on existing Draft PR #6 is authorized within Phase 03C:
+uncertain commit outcomes must make both committed and pending reads fail
+closed until a validated close-and-reopen recovery. No later phase is opened.
 
 ## Historical Phase 03B post-merge governance closeout (superseded by Phase 03C authority)
 

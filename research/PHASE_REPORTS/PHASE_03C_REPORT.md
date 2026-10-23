@@ -152,3 +152,42 @@ crash-proof durability.
 
 **STOP:** No merge, no Phase 03D work. Await Controller review and Owner
 acceptance of Phase 03C and proposed D-024.
+
+## Controller R1 rework addendum — 2026-10-23
+
+The Controller reviewed `6459a1ad7ee5a17994f484c04f47658a976d9ea6`
+and found that an uncertain Commit blocked Prepare and Commit but allowed
+`Committed()` and `Pending()` to expose snapshots. After a post-sync response
+error, the durable record may already be at the new height while the
+in-memory committed value still represents the old height. Those reads could
+therefore mislead a caller.
+
+Both read methods now check `s.uncertain` under the existing read lock and
+return `ErrUncertain` with no snapshot while the outcome is unresolved.
+Closed-store errors retain their existing precedence. A BeforeSync error
+does not set uncertainty, so the old committed snapshot and retryable pending
+candidate remain readable. Returned Pebble write errors and AfterSync errors
+continue to leave in-memory committed unchanged, block Prepare/Commit, and
+require close/reopen. No ambiguous write is retried or inferred successful.
+
+Existing fault tests now assert fail-closed reads for both error boundaries,
+normal reads after successful Commit, pre-write readability, unchanged
+internal committed/pending values, blocked operations and old/new complete
+snapshot recovery on reopen. A new concurrent-reader regression coordinates
+24 readers with a post-sync error and checks that no read bypasses the
+uncertainty gate; a race-enabled repeated run exercises the same boundary.
+
+The new commands, exit codes, race/coverage/fuzz results and independent
+vector recheck are in
+[rework_r1/verification.log](../evidence/phase_03c/rework_r1/verification.log).
+The final local rework run exited 0 for every command, including targeted
+regressions, `make verify`, real-node integration, package race tests, ten
+race-enabled concurrent-reader repetitions, three bounded five-second fuzz
+targets and the independent oracle. Statement coverage was 92.2% for
+`b0state` and 93.1% for `b0store`. The original vector JSON SHA-256 remained
+`3d8491b174f44ae51c99796d48c4001ba56e86e008c5dbd08f7d1b68007d69f7`.
+The historical Phase 03C verification and vector artifacts above were not
+rewritten. Accepted D-020–D-023 rules, Phase 02 runtime, cryptography,
+dependencies, Genesis V2 and AppHash V2 remain unchanged. D-024 remains
+**Proposed**, and Phase 03D remains unauthorized. The new result commit and
+Draft PR #6 CI status are recorded in the Controller rework chat report.

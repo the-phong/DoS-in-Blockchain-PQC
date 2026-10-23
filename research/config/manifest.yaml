@@ -7,7 +7,7 @@ project:
   active_authorization: phase_03c_isolated_state_and_persistence_only
   phase_03b_status: completed_controller_accepted_merged
   phase_03c_implementation_authorized: true
-  phase_03c_status: implementation_candidate_pending_controller_owner_review
+  phase_03c_status: controller_rework_R1_candidate_pending_review
   phase_03d_implementation_authorized: false
   implementation_status: single_validator_empty_block_foundation_plus_isolated_b0_library_and_v2_state
   phase_03a_specification_authorized: true

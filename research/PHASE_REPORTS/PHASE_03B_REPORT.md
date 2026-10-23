@@ -111,3 +111,26 @@ FOR PHASES 03C–03E**. No multi-validator B0, V2 state, crash-recovery or DoS
 performance result is claimed. A short fuzz run and four golden vectors do
 not establish exhaustive cryptographic assurance. D-023 and this report await
 independent Controller/Owner review. Phase 03C is not authorized.
+
+## Acceptance addendum — 2026-10-23
+
+This addendum records decisions made after the execution report above. The
+Controller accepted Phase 03B, and PR #4 was merged into `test-mainet` at
+`8be07c87abed73763d40252e99bbf0573da487b4`. The Owner explicitly
+accepted D-023, selecting `github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1`
+for B0-Core. The post-merge [push verification](https://github.com/the-phong/DoS-in-Blockchain-PQC/actions/runs/39892775154)
+and [pull-request verification](https://github.com/the-phong/DoS-in-Blockchain-PQC/actions/runs/39892779874)
+both completed successfully. Earlier pending-review statements above remain
+the historical execution snapshot; they do not describe the current status.
+This addendum changes no normative protocol rule, prior test result, vector,
+runtime behavior or dependency version. Phase 03C remains unauthorized.
+
+The documentation-only closeout was verified on the merged source baseline
+`8be07c87abed73763d40252e99bbf0573da487b4`: `git diff --check`,
+`make verify`, `make test-integration`, and the source-diff check for runtime,
+cryptographic code, dependencies, tests, accepted specifications, and golden
+vectors all exited 0. Exact output and environment are in the new
+[closeout verification log](../evidence/phase_03b_closeout/verification.log).
+The governance closeout branch and resulting commit are recorded in its
+Draft PR and final agent report; this addendum is not an authorization for
+Phase 03C.

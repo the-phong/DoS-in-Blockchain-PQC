@@ -1,8 +1,8 @@
 # Architectural decision log
 
-## Phase 03B dependency decision (2026-10-23; implementation choice for review)
+## Phase 03B dependency decision (2026-10-23; Accepted by Owner)
 
-**D-023 — Stateless secp256k1 adapter dependency.** Select
+**D-023 — Stateless secp256k1 adapter dependency (Accepted by Owner on 2026-10-23).** Select
 `github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1` as the direct dependency
 for Phase 03B's compressed-point parsing, ECDSA verification over an already
 computed 32-byte digest, and deterministic test-only signing. It was already
@@ -20,8 +20,10 @@ retain indirect v4.4.0; add a different secp256k1 stack; implement curve
 arithmetic locally. v4.4.1 is the latest version listed by the Go module
 index at selection time and supports the required prehashed ECDSA API.
 This adapter is isolated from the Phase 02 ABCI runtime. D-020–D-022 remain
-unchanged and accepted; Owner/Controller review of this dependency choice is
-pending with the Phase 03B Draft PR.
+unchanged and accepted. The Owner accepted this exact dependency selection on
+2026-10-23 after Controller acceptance and the merge of Phase 03B PR #4 at
+`8be07c87abed73763d40252e99bbf0573da487b4`. This acceptance does not
+authorize Phase 03C or change the accepted B0 V1 protocol.
 
 ## Phase 03A B0 V1 protocol decisions (2026-10-23; accepted by owner)
 

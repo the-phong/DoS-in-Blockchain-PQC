@@ -1,6 +1,18 @@
 # Pluto agent execution contract
 
-## Current authority — Phase 03B (2026-10-23)
+## Current authority — Phase 03B post-merge governance closeout (2026-10-23)
+
+The Owner accepted D-023 on 2026-10-23. Phase 03B PR #4 was merged into
+`test-mainet` at `8be07c87abed73763d40252e99bbf0573da487b4`; Phase 03B
+is complete and Controller-accepted. The coding agent is authorized only to
+record this acceptance in governance documentation on the dedicated
+`governance/03b-acceptance-closeout` branch, run the required verification,
+commit, push, and open a Draft PR targeting `test-mainet`. The Owner controls
+the governance merge. Phase 03C and later work are not authorized. Do not
+change runtime, transaction cryptography, dependencies, tests, accepted
+specifications, or historical evidence during this closeout.
+
+## Historical Phase 03B implementation authority (superseded by Owner closeout decision)
 
 The Owner accepted D-020–D-022, merged Phase 03A PR #3 into `test-mainet`
 at `54bf720ac4625c17eaa6101a8f398ef7c0663432`, and explicitly authorized

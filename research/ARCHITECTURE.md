@@ -7,6 +7,10 @@ CometBFT v0.38.26 child process. It is not an EVM or hybrid chain.
 Phase 02R retains this implementation. D-019 requires a complete minimal
 classical B0-Core before deciding at Phase 04 whether EVM integration is
 needed; no future module in the diagram is currently approved for coding.
+The owner has accepted Phase 03A's B0 V1 transaction and V2 logical-state
+specifications in `research/specs/` and D-020–D-022 after Controller rework.
+This approval does not change the implemented baseline or authorize Phase 03B.
+The current runtime AppHash remains the Phase 02 V1 digest.
 
 ```mermaid
 flowchart TB

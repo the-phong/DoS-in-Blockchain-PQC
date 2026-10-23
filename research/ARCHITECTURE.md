@@ -9,7 +9,9 @@ classical B0-Core before deciding at Phase 04 whether EVM integration is
 needed; no future module in the diagram is currently approved for coding.
 The owner has accepted Phase 03A's B0 V1 transaction and V2 logical-state
 specifications in `research/specs/` and D-020–D-022 after Controller rework.
-This approval does not change the implemented baseline or authorize Phase 03B.
+The subsequent explicit Phase 03B authorization permits a standalone
+`internal/tx` stateless library. It does not change the transaction-free node,
+ABCI implementation, Pebble record or AppHash V1.
 The current runtime AppHash remains the Phase 02 V1 digest.
 
 ```mermaid
@@ -111,6 +113,7 @@ flowchart LR
   App --> Store[internal/store]
   App --> Types[CometBFT ABCI types]
   Store --> Pebble[Pebble]
+  Library[internal/tx: standalone B0 V1 codec and authentication]
   CLI --> Version[internal/version]
   Hybrid[future internal/hybrid] -. canonical authentication .-> App
   EVM[future internal/evm] -. sequential execution .-> App
@@ -123,7 +126,8 @@ state-dependent validity, persistent state and AppHash. If Phase 04 approves
 EVM, its first execution model is sequential. `HYBRID_REQUIRED` must fail
 closed. Consensus-critical results may not depend on local clocks, CPU
 budgets, queue occupancy, caches, scheduling or mempool arrival order. No
-future modules are implemented now.
+future account, hybrid or EVM modules are implemented. `internal/tx` is a
+standalone stateless Phase 03B library and is not imported by `internal/app`.
 
 The node is localhost-only by default but has signing keys and is not hardened
 for hostile networks. Genesis and Pluto metadata are checked on startup;

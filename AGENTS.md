@@ -1,6 +1,18 @@
 # Pluto agent execution contract
 
-## Current authority — Phase 03A (2026-10-23)
+## Current authority — Phase 03B (2026-10-23)
+
+The Owner accepted D-020–D-022, merged Phase 03A PR #3 into `test-mainet`
+at `54bf720ac4625c17eaa6101a8f398ef7c0663432`, and explicitly authorized
+Phase 03B on `phase/03b-classical-tx-crypto`. This phase may implement and
+test only stateless B0 V1 canonical transaction encoding, secp256k1
+authentication, address/ID derivation and reproducible vectors. The Phase 02
+ABCI runtime and persisted state remain transaction-free. Phase 03C and later
+work, runtime transaction integration, accounts, EVM and hybrid mechanisms
+remain unauthorized. D-020–D-022 are frozen; an apparent contradiction
+requires Controller review rather than a silent protocol change.
+
+## Historical Phase 03A authority (superseded by Owner Phase 03B decision)
 
 The project owner explicitly authorized **Phase 03A — Classical Transaction
 Protocol Specification** after the Phase 02R merge and has now accepted its
@@ -32,8 +44,8 @@ next phase.
 The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
 03E before the Phase 04 decision on whether sequential EVM integration is
 necessary. EVM is optional pending that decision; if approved, execution must
-begin sequentially. Phase 03A documentation closeout alone is now authorized;
-03B–14 remain future work until separately authorized. Do not design admission
+begin sequentially. Phase 03B alone is now authorized;
+03C–14 remain future work until separately authorized. Do not design admission
 optimization before Phase 11 profiling.
 
 ## Historical Phase 02R authority (superseded by owner Phase 03A decision)

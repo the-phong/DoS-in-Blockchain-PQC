@@ -7,6 +7,7 @@ tool github.com/cometbft/cometbft/cmd/cometbft
 require (
 	github.com/cockroachdb/pebble v1.1.5
 	github.com/cometbft/cometbft v0.38.26
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1
 )
 
 require (
@@ -22,7 +23,6 @@ require (
 	github.com/cometbft/cometbft-db v0.14.1 // indirect
 	github.com/cosmos/gogoproto v1.7.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
 	github.com/dgraph-io/ristretto v0.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect

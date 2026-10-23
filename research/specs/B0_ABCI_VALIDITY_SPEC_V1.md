@@ -1,6 +1,6 @@
-# B0 ABCI++ validity contract V1 — Phase 03A proposal
+# B0 ABCI++ validity contract V1 — Owner-accepted Phase 03A specification
 
-**Status: PROPOSED; not implemented.** This contract targets the pinned [CometBFT v0.38.26 `abci.Application` interface](https://github.com/cometbft/cometbft/blob/v0.38.26/abci/types/application.go) and its [ABCI++ application requirements](https://github.com/cometbft/cometbft/blob/v0.38.26/spec/abci/abci%2B%2B_app_requirements.md). It must not be substituted with the historical Phase 01 v1.0.0 reference. Current Phase 02 code continues to reject all transactions.
+**Status: ACCEPTED BY OWNER on 2026-10-23 after Controller rework; not implemented.** This contract records accepted D-022 and targets the pinned [CometBFT v0.38.26 `abci.Application` interface](https://github.com/cometbft/cometbft/blob/v0.38.26/abci/types/application.go) and its [ABCI++ application requirements](https://github.com/cometbft/cometbft/blob/v0.38.26/spec/abci/abci%2B%2B_app_requirements.md). It must not be substituted with the historical Phase 01 v1.0.0 reference. Current Phase 02 code continues to reject all transactions.
 
 ## 1. Shared evaluator and limits
 
@@ -8,7 +8,7 @@ All future transaction paths use the same ordered decode, authentication and tra
 
 The B0 application-level block limit is **6,144 transactions** and **1,048,576 aggregate raw transaction bytes**, summed with checked unsigned arithmetic. Each transaction is at most 195 bytes. Both bounds are independently reachable with **otherwise valid, signed, funded, sequential-nonce transactions**: 6,145 records with a 1-byte chain ID total 897,170 bytes and isolate count, while 5,378 records with a 50-byte chain ID total 1,048,710 bytes and isolate aggregate size. Exact fixtures and preconditions are in [vector V20](B0_TEST_VECTOR_PLAN_V1.md#2-required-vector-matrix). These limits are fixed protocol rules for `ProcessProposal` and `FinalizeBlock`, independent of node resources. CometBFT may enforce stricter consensus block limits; `PrepareProposal` additionally obeys `RequestPrepareProposal.MaxTxBytes`. Proposing fewer transactions due to local mempool contents is allowed; accepting or rejecting the same complete proposal based on CPU, wall clock, queue occupancy, mempool arrival or nonreplicated cache is forbidden.
 
-The following result codes and exact `Log` strings are proposed for both `ResponseCheckTx` and `ExecTxResult`. `Codespace` is `pluto.b0.v1`; `Data` and events are empty, `GasWanted`/`GasUsed` are zero, and `Priority` in `CheckTx` is zero. Codes are determined by the first failing stage in the transaction specification. Code 10 is a block-level envelope failure and never a per-transaction validity result from `CheckTx`.
+The following result codes and exact `Log` strings are specified for both `ResponseCheckTx` and `ExecTxResult`. `Codespace` is `pluto.b0.v1`; `Data` and events are empty, `GasWanted`/`GasUsed` are zero, and `Priority` in `CheckTx` is zero. Codes are determined by the first failing stage in the transaction specification. Code 10 is a block-level envelope failure and never a per-transaction validity result from `CheckTx`.
 
 | Code | Exact `Log` | Meaning |
 |---:|---|---|
@@ -58,7 +58,7 @@ Atomically persist the complete pending account state, height and V2 commitment 
 
 ### `Query`
 
-Queries are non-consensus reads of committed state only. The proposed exact account endpoint is `Path="b0/account/v1"`, `Data=address[20]`, `Height=0` (latest only), `Prove=false`. Return `ResponseQuery.Code=0`, `Height=committed height`, and `Value=0x01 || uint64_be(balance) || uint64_be(nonce)` for a present account, or the single byte `0x00` for an absent account. For any other path, malformed address length, nonzero requested height or `Prove=true`, return Code 1, `Codespace="pluto.query.v1"`, empty Value and `Log="unsupported_query"`. No Merkle or historical proof is claimed. Callers must account for local-node staleness.
+Queries are non-consensus reads of committed state only. The specified exact account endpoint is `Path="b0/account/v1"`, `Data=address[20]`, `Height=0` (latest only), `Prove=false`. Return `ResponseQuery.Code=0`, `Height=committed height`, and `Value=0x01 || uint64_be(balance) || uint64_be(nonce)` for a present account, or the single byte `0x00` for an absent account. For any other path, malformed address length, nonzero requested height or `Prove=true`, return Code 1, `Codespace="pluto.query.v1"`, empty Value and `Log="unsupported_query"`. No Merkle or historical proof is claimed. Callers must account for local-node staleness.
 
 ### Other methods
 
@@ -75,6 +75,6 @@ Snapshot/state sync stays unsupported and vote extensions stay disabled as in Ph
 
 The first three outcomes are not interchangeable. Proposal validation and final execution share bytes, validation order and state-transition rules. A transaction is never made valid by having passed local admission, nor made invalid by resource pressure. Every correct validator processing the same committed state and decided block must produce identical ordered results, resulting state and AppHash. See the pinned [v0.38.26 ABCI++ specification](https://github.com/cometbft/cometbft/blob/v0.38.26/spec/abci/abci%2B%2B_app_requirements.md) for the surrounding engine contract.
 
-## 4. Review questions
+## 4. Implementation validation and future changes
 
-(Q1) Should anomalous decided invalid transactions always receive deterministic failure results as proposed, or should a narrower block-level exception be specified? Any alternative must maintain the `TxResults` count and replay agreement. (Q2) Do the fixed 6,144/1,048,576 bounds fit the planned four-validator B0 deployment and CometBFT genesis block parameters? (Q3) Should the simple latest-only account query be deferred beyond Phase 03D? These questions require review before an implementation gate; no runtime policy is changed now.
+The Owner accepted the deterministic invalid-decided-block fallback, fixed 6,144/1,048,576 application bounds and latest-only account query as V1 rules. Later implementation must test their interaction with CometBFT genesis block parameters, four-validator liveness, replay and persistence. A different fallback, limit or query policy requires a new reviewed decision; none is changed by this closeout. No runtime policy is implemented now.

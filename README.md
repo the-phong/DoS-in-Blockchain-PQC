@@ -99,13 +99,15 @@ Transaction implementation in Phase 03B and later is **not authorized**. D-018 g
 one approved phase per branch, Draft PRs to `test-mainet`, and owner-controlled
 merges. The Phase 02 local-only Git exception remains in historical records.
 
-## Phase 03A protocol proposal
+## Phase 03A accepted protocol specification
 
-The owner has authorized a specification-only Phase 03A. The proposed
+The owner authorized and accepted the specification-only Phase 03A B0 V1
+protocol and decisions D-020–D-022 after Controller rework. The accepted
 [B0 transaction format](research/specs/B0_CLASSICAL_TRANSACTION_PROTOCOL_V1.md),
 [account transitions and AppHash V2](research/specs/B0_STATE_TRANSITION_SPEC_V1.md),
 [ABCI validity policy](research/specs/B0_ABCI_VALIDITY_SPEC_V1.md) and
-[test-vector plan](research/specs/B0_TEST_VECTOR_PLAN_V1.md) are awaiting
-controller and owner review. They are not implemented by the current binary;
-it still rejects all transactions. Phase 03B is not authorized.
+[test-vector plan](research/specs/B0_TEST_VECTOR_PLAN_V1.md) are protocol and
+test requirements for future authorized work. They are not implemented by the
+current binary; it still rejects all transactions. PR #3 remains a Draft for
+owner-controlled merge. Phase 03B is not authorized.
 

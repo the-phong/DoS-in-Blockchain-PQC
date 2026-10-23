@@ -1,10 +1,10 @@
-# B0 classical transaction protocol V1 — Phase 03A proposal
+# B0 classical transaction protocol V1 — Owner-accepted Phase 03A specification
 
-**Status: PROPOSED for controller and owner review; not implemented or accepted.** This document defines consensus bytes for a minimal, fee-free, account-based value transfer. The current Phase 02 application still rejects every transaction. Phases 03B–03E need separate authorization. Normative words **MUST**, **MUST NOT**, and **SHOULD** apply to a future B0 implementation only.
+**Status: ACCEPTED BY OWNER on 2026-10-23 after Controller rework; not implemented.** This document defines consensus bytes for a minimal, fee-free, account-based value transfer under accepted D-020. The current Phase 02 application still rejects every transaction. Phases 03B–03E need separate authorization. Normative words **MUST**, **MUST NOT**, and **SHOULD** apply to a future B0 implementation only.
 
 ## 1. Scope and choices
 
-| Decision | Proposed normative choice | Rationale and trade-off |
+| Decision | Accepted normative choice | Rationale and trade-off |
 |---|---|---|
 | Transaction purpose | Transfer indivisible B0 units between 20-byte accounts only. | Small correctness baseline; no fee market, gas, memo, expiry, EVM call or contract data. Spam resistance is absent and must be addressed at a later approved gate, without changing consensus validity using local resources. |
 | Version | Magic `PLUTOTX1` plus unsigned big-endian `uint16` version `1`. | Explicit format boundary; unknown versions fail closed. |
@@ -74,8 +74,8 @@ The future common evaluator MUST apply these stages in order and stop at the fir
 
 The first failing stage determines the code. Cheap structural, chain, amount and scalar checks precede point decompression and ECDSA to avoid needless expensive work on common invalid inputs. This fixes a deterministic error precedence across `CheckTx`, proposal evaluation and final execution; it adds no admission mechanism or local-resource-dependent rule. In a resource-cost experiment, the invalid-input mix and rejection stage MUST be recorded because a zero-amount transaction no longer incurs ECDSA verification, while a nonzero amount with canonical but invalid signature can still exercise that cost. Fair B0/B1 comparisons must use the same declared validity stages and workloads, while separately measuring any inherently different authentication work. All stages through 6 are independent of account state (stage 2 reads the fixed chain identity); stages 7–9 use the sequential candidate account state. TxID eligibility is the separate predicate in section 4 and does not change this first-failure order. An all-zero receiver address is a regular address, not a burn address. There is no fallback to another signature scheme.
 
-## 6. Review questions and references
+## 6. Implementation follow-ups and references
 
-The owner/controller should approve or revise these proposed choices before Phase 03B: (Q1) fee-free B0 units and their human display scale; (Q2) 20-byte SHA-256-derived addresses versus a longer digest; (Q3) account/block limits and future capacity upgrade path; (Q4) whether Phase 03C should allow only fresh V2 genesis or separately specify a migration from Phase 02 homes. No choice here is marked accepted by the owner.
+The Owner accepted the fee-free B0 unit rule, 20-byte SHA-256-derived addresses, and the stated account/block limits. Future implementation may choose a human display scale without changing wire units; any change to accepted protocol rules requires a new Owner-approved decision. A future capacity upgrade or Phase 02-to-V2 migration would likewise require a separate specification, approval and tests. Neither is included in this accepted V1 protocol. Phase 03B remains unauthorized.
 
-Primary references: [SEC 1 v2.0](https://www.secg.org/sec1-v2.pdf), [SEC 2 v2.0](https://www.secg.org/sec2-v2.pdf), [RFC 6979](https://www.rfc-editor.org/rfc/rfc6979), and the pinned [CometBFT v0.38.26 ABCI application requirements](https://github.com/cometbft/cometbft/blob/v0.38.26/spec/abci/abci%2B%2B_app_requirements.md). None of these sources makes this proposed Pluto wire format a standard.
+Primary references: [SEC 1 v2.0](https://www.secg.org/sec1-v2.pdf), [SEC 2 v2.0](https://www.secg.org/sec2-v2.pdf), [RFC 6979](https://www.rfc-editor.org/rfc/rfc6979), and the pinned [CometBFT v0.38.26 ABCI application requirements](https://github.com/cometbft/cometbft/blob/v0.38.26/spec/abci/abci%2B%2B_app_requirements.md). None of these sources makes the Pluto wire format a standard.

@@ -3,12 +3,13 @@
 ## Current authority — Phase 03A (2026-10-23)
 
 The project owner explicitly authorized **Phase 03A — Classical Transaction
-Protocol Specification** after the Phase 02R merge. The coding agent may
-write protocol specifications, correctness invariants, test-vector plans,
-review evidence and necessary governance updates on the dedicated
-`phase/03a-tx-protocol` branch from verified `test-mainet`. It may commit,
-push and open a Draft PR targeting `test-mainet`. Phase 03A proposes rules
-for independent review; it does not accept them on the owner's behalf.
+Protocol Specification** after the Phase 02R merge and has now accepted its
+B0 V1 protocol and D-020–D-022 following Controller rework. The coding agent
+is authorized for Phase 03A documentation closeout only on the existing
+`phase/03a-tx-protocol` branch from verified `test-mainet`. It may commit and
+push closeout documentation to the existing Draft PR targeting `test-mainet`.
+Owner acceptance freezes the specified rules for later separately authorized
+work; it does not mean those rules are implemented or tested in the node.
 Runtime changes, transaction/crypto implementation, EVM, hybrid mechanisms,
 consensus/mempool changes and Phase 03B or later work are **not authorized**.
 The implemented Phase 02 architecture remains the transaction-free baseline.
@@ -31,9 +32,9 @@ next phase.
 The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
 03E before the Phase 04 decision on whether sequential EVM integration is
 necessary. EVM is optional pending that decision; if approved, execution must
-begin sequentially. Phase 03A alone is now authorized; 03B–14 remain future
-work until separately authorized. Do not design admission optimization before
-Phase 11 profiling.
+begin sequentially. Phase 03A documentation closeout alone is now authorized;
+03B–14 remain future work until separately authorized. Do not design admission
+optimization before Phase 11 profiling.
 
 ## Historical Phase 02R authority (superseded by owner Phase 03A decision)
 

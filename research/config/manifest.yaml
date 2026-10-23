@@ -1,4 +1,4 @@
-# Phase 03A specification work over the unchanged Phase 02 implementation.
+# Owner-accepted Phase 03A specification over the unchanged Phase 02 implementation.
 # This is a tested development configuration, not a performance experiment.
 project:
   name: Pluto
@@ -8,7 +8,7 @@ project:
   phase_03a_specification_authorized: true
   phase_03b_implementation_authorized: false
   evm_decision: conditional_phase_04_after_b0_core
-  b0_protocol_status: proposed_pending_controller_owner_review
+  b0_protocol_status: accepted_by_owner_not_implemented
 application:
   version: 0.2.0-foundation
   state_format_version: 1
@@ -18,6 +18,7 @@ source:
   source_branch: test-mainet
   source_commit: ab1d1746fdd70bc0bbf00f20a186663f3cacf2ab
   working_branch: phase/03a-tx-protocol
+  accepted_protocol_commit: e205a2195d3beb634842cf986e1df5d0ed542dbb
   result_commit: recorded_in_phase_03a_final_chat_and_draft_pr
   phase_01_baseline_manifest: research/evidence/phase_02/BASELINE_SHA256.txt
   phase_02_source_manifest: research/evidence/phase_02/RESULT_SHA256.txt
@@ -56,7 +57,7 @@ build:
   configuration: standard_go_compiler_with_revision_ldflag
   binaries: build/plutod_and_build/cometbft
 verification:
-  status: phase_03a_required_checks_passed_protocol_review_pending
+  status: phase_03a_closeout_checks_passed_protocol_accepted_not_implemented
   suite: git_diff_check_make_verify_make_test-integration
   evidence: research/evidence/phase_03a/
   limitations: graceful_restart_only_no_power_loss_or_four_validator_test

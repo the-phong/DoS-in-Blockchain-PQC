@@ -1,6 +1,6 @@
-# B0 account state and transitions V1 — Phase 03A proposal
+# B0 account state and transitions V1 — Owner-accepted Phase 03A specification
 
-**Status: PROPOSED; no account state or V2 AppHash is implemented.** This document defines logical consensus state. It preserves the existing Phase 02 `PLUTO02!` record and height-only V1 AppHash as a historical baseline. No Phase 02 database is migrated, reset or rewritten by this specification.
+**Status: ACCEPTED BY OWNER on 2026-10-23 after Controller rework; no account state or V2 AppHash is implemented.** This document defines logical consensus state under accepted D-021. It preserves the existing Phase 02 `PLUTO02!` record and height-only V1 AppHash as a historical baseline. No Phase 02 database is migrated, reset or rewritten by this specification.
 
 ## 1. Logical state and invariants
 
@@ -22,7 +22,7 @@ uint32_be(K) || K * (address[20] || uint64_be(balance))
 
 `N` is 1–50, with the permitted ASCII chain ID. `K` is 1–65,536. Entries are strictly increasing by raw address bytes, unique, and each genesis balance is greater than zero. No nonce is encoded because every genesis nonce is zero. Exact input length is `8 + 4 + 2 + N + 4 + 28*K` bytes; trailing bytes, unknown magic/version, noncanonical order, duplicate addresses, zero balances or sum exceeding `MaxUint64` fail genesis validation. `InitChain.ChainId` MUST equal this encoded chain ID. `total_supply` is the checked sum of allocations. The resulting application state is height 0 and uses the V2 AppHash below.
 
-The existing Phase 02 genesis uses empty app state and the V1 state record. A V2-capable implementation MUST NOT silently read that record as V2, infer allocations, reset either store or change AppHash. The proposed B0 path is fresh genesis only unless a separately authorized, explicit, tested migration is specified. Operators must preserve Phase 02 homes and use a new home for a fresh B0 chain. This is a protocol compatibility boundary, not a current runtime behavior.
+The existing Phase 02 genesis uses empty app state and the V1 state record. A V2-capable implementation MUST NOT silently read that record as V2, infer allocations, reset either store or change AppHash. The accepted B0 V1 path is fresh genesis only unless a separately authorized, explicit, tested migration is specified. Operators must preserve Phase 02 homes and use a new home for a fresh B0 chain. This is a protocol compatibility boundary, not a current runtime behavior.
 
 ## 3. Sequential transfer function
 
@@ -66,6 +66,6 @@ The Phase 02 V1 digest is `SHA-256("PLUTO/APP_STATE/V1\0" || version || chain ID
 | State height `MaxInt64` | Refuse next block; no wrap or commit. |
 | Any successful block | Sum of account balances equals unchanged total supply; accounts remain sorted and unique. |
 
-## 6. Review questions
+## 6. Implementation follow-ups
 
-(Q1) Is a fee-free B0 chain acceptable for the stated correctness baseline, given no economic spam deterrent? (Q2) Is the hard 65,536-account cap appropriate for later four-validator tests, and how should a future version lift it? (Q3) Should a separately authorized migration ever convert Phase 02 homes, or should B0 require fresh genesis permanently? (Q4) What atomic physical storage layout and fault-injection matrix will Phase 03C use? The logical rules above are proposed normative choices; these operational decisions remain open for review.
+The Owner accepted the fee-free correctness baseline, 65,536-account cap and fresh-genesis V1 path. The cap's deployment suitability still needs testing; any later increase requires a new protocol version and decision. A Phase 02-home migration would require a separately approved specification and operator action. Future Phase 03C work must select an atomic physical storage layout and fault-injection matrix under its own authorization. None of these follow-ups changes the accepted logical rules here.

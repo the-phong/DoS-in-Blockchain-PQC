@@ -7,11 +7,11 @@ to that investigation? No finding or publication
 outcome is presumed. Every phase requires a separate human authorization;
 finishing one phase does not authorize the next.
 
-**Current execution authority (2026-10-23):** The owner has explicitly
-authorized Phase 03A specification work on `phase/03a-tx-protocol` after the
-Phase 02R merge. Its protocol documents are proposals pending review, not
-implemented or owner-accepted rules. Phase 03B and all later implementation
-remain unauthorized.
+**Current execution authority (2026-10-23):** The owner accepted the Phase 03A
+B0 V1 specifications and D-020–D-022 after Controller rework. Documentation
+closeout on the existing `phase/03a-tx-protocol` Draft PR is authorized; the
+accepted protocol is not implemented. Phase 03B and all later implementation
+remain unauthorized. The owner controls the Phase 03A PR merge.
 
 The method is: protocol specification → correctness oracle → functional
 implementation → adversarial testing → instrumentation → baseline measurement

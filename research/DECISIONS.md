@@ -1,13 +1,15 @@
 # Architectural decision log
 
-## Phase 03A protocol proposals (2026-10-23; review pending)
+## Phase 03A B0 V1 protocol decisions (2026-10-23; accepted by owner)
 
-The owner authorized **specification work only**. The decisions below are
-**Proposed**, not owner-accepted implementation decisions. Their exact rules,
-alternatives, rationale and open questions are in `research/specs/` and the
-Phase 03A report. Phase 03B requires separate approval after review.
+The owner authorized specification work and, after Controller R1–R5 rework,
+explicitly **accepted D-020, D-021 and D-022 as B0 V1 protocol rules** on
+2026-10-23. Their exact rules, alternatives and rationale are in
+`research/specs/` and the Phase 03A report. Acceptance does not mean the
+protocol is implemented or cryptographically tested. The Owner controls
+Draft PR #3's merge; Phase 03B requires separate authorization after merge.
 
-**D-020 — B0 classical transaction V1 (Proposed).** Select a fixed binary,
+**D-020 — B0 classical transaction V1 (Accepted by Owner).** Select a fixed binary,
 versioned, chain-bound value-transfer wire format with compressed secp256k1
 public key, `uint64` amount/nonce, compact low-S ECDSA signature, SHA-256
 domain-separated signed intent, SHA-256-derived 20-byte account address and
@@ -22,11 +24,12 @@ and canonical signature scalars precede point validation/ECDSA. A matching
 sender nonce of `MaxUint64` fails Code 6 before balance checks. Pluto TxID
 exists exactly for structurally valid V1 wire with in-range low-S scalars,
 even if its key, signature, chain or state is invalid; CometBFT RPC instead
-uses SHA-256 of raw transaction bytes. Status: **Proposed, not
-accepted**. Verification: no transaction bytes or cryptographic vectors were
-generated or executed in Phase 03A.
+uses SHA-256 of raw transaction bytes. Status: **Accepted by Owner on
+2026-10-23 for future separately authorized implementation**. Verification:
+no transaction bytes or cryptographic vectors were generated or executed in
+Phase 03A.
 
-**D-021 — B0 account state and AppHash V2 (Proposed).** Select checked
+**D-021 — B0 account state and AppHash V2 (Accepted by Owner).** Select checked
 `uint64` balances, nonces and supply, sorted 20-byte accounts, sequential
 value transfers, no fees/mint/burn, and a SHA-256 commitment to version,
 chain ID, height, supply and all accounts. New B0 chains use canonical V2
@@ -37,10 +40,11 @@ before optional EVM work. Trade-offs: flat commitment has no account proof
 and may be costly at scale; physical atomic persistence is future Phase 03C
 work. Full-state recomputation is proportional to account count; B0/B1
 measurements must control account count and execution model. Status:
-**Proposed, not accepted**. Verification: specification review
+**Accepted by Owner on 2026-10-23 for future separately authorized
+implementation**. Verification: specification review
 and arithmetic/length checks only; no V2 state exists in code.
 
-**D-022 — B0 ABCI validity policy (Proposed).** Select conservative
+**D-022 — B0 ABCI validity policy (Accepted by Owner).** Select conservative
 committed-state `CheckTx`, deterministic sequential validation of the full
 proposal in `ProcessProposal`, and one ordered result per decided transaction
 in `FinalizeBlock`, with invalid decided transactions skipped without state
@@ -49,13 +53,15 @@ admission, accepting all proposals, or aborting finalization on ordinary bad
 transaction bytes. Rationale: independent proposer-injection defense and
 deterministic fallback without unnecessary application halt. Trade-offs:
 strict proposal rejection may cost rounds under bad proposers; the anomalous
-decided-block fallback and fixed count/byte limits need independent review.
+decided-block fallback and fixed count/byte limits require implementation and
+multi-validator validation before operational claims.
 The shared evaluator now explicitly uses cheap structural/amount/scalar checks
 before ECDSA, rejects nonce overflow as Code 6, and distinguishes Pluto TxID
 eligibility from CometBFT's raw-byte RPC hash. Block-limit fixtures require
 otherwise valid signed and funded sequential transactions.
-Status: **Proposed, not accepted**. Verification: pinned v0.38.26 interface
-review only; current Phase 02 runtime still rejects all transactions.
+Status: **Accepted by Owner on 2026-10-23 for future separately authorized
+implementation**. Verification: pinned v0.38.26 interface review only;
+current Phase 02 runtime still rejects all transactions.
 
 ## Phase 02R approved governance and roadmap decisions (2026-10-23)
 

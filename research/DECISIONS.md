@@ -1,5 +1,33 @@
 # Architectural decision log
 
+## Phase 03C physical storage decision (2026-10-24; accepted by Owner)
+
+**D-024 — Isolated B0 V2 complete-snapshot persistence (Accepted by Owner on
+2026-10-24).** Use a separate Pebble database directory selected by an
+explicit caller. Store one complete versioned record at key
+`pluto/committed-state/v2` as
+`ASCII("PLUTOS2!") || canonical_logical_state_v2 || AppHashV2[32]`, replacing
+it with one `DB.Set(key, value, pebble.Sync)` per committed block. Opening
+validates the entire record, V2 version, chain context, account invariants
+and recomputed hash; the existing V1 key fails closed. Fresh initialization requires an absent
+directory and canonical Genesis V2. Alternatives: multi-key atomic batch,
+per-account updates, implicit migration of V1 data. A single record makes
+the commit boundary and corruption checks simple, at O(K) serialization,
+hashing and write cost for K accounts. A returned write error can leave the
+durable outcome uncertain; the store does not promote in-memory state and
+requires close/reopen validation before another candidate. This decision
+does not claim physical power-loss durability from graceful restart tests.
+The existing Phase 02 store and live ABCI path are unchanged. **Status:
+ACCEPTED BY OWNER on 2026-10-24**, strictly as a correctness-oriented
+experimental B0 baseline after Controller acceptance of Phase 03C, the R1
+correction and the [risk addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md).
+Full-snapshot serialization, hashing and persistence cost O(K). Pluto and
+CometBFT have no shared atomic commit. Production-grade or arbitrary-power-loss
+durability has not been established, and B0 V2 cross-store crash recovery
+remains unverified. Any later persistence-architecture change requires an
+explicit, separately versioned decision and appropriate tests. This decision
+does not merge PR #6, activate live B0 transactions or authorize Phase 03D.
+
 ## Phase 03B dependency decision (2026-10-23; Accepted by Owner)
 
 **D-023 — Stateless secp256k1 adapter dependency (Accepted by Owner on 2026-10-23).** Select

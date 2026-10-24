@@ -1,6 +1,46 @@
-# Phase status — 2026-10-23
+# Phase status — 2026-10-24
 
-## Current governance closeout after Phase 03B merge
+## Current Phase 03C Owner acceptance and pre-merge closeout
+
+**Phase 03C — COMPLETED, CONTROLLER ACCEPTED, OWNER ACCEPTED, AWAITING
+OWNER-CONTROLLED MERGE OF PR #6.** The Owner accepted the implementation,
+R1 fail-closed read correction, risk addendum and D-024 on 2026-10-24.
+D-024 is accepted only as a correctness-oriented experimental B0 persistence
+baseline. The reviewed branch commit is
+`3484c0f3a47dffa24ddcc0dbad2d95ca23ce31fc`; PR #6 remains open and
+Draft against `test-mainet`. This acceptance is not a merge.
+
+`internal/b0state` and `internal/b0store` remain standalone. The live Phase 02
+ABCI application still rejects every transaction and uses V1 state and
+AppHash. The [risk addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md)
+retains R2, cross-store matrix M1–M12 (**NOT RUN** for B0 V2), full-state O(K)
+benchmark requirements and Phase 03D gates G1–G8 (**NOT SATISFIED**).
+No Phase 03D or later implementation is authorized; the Owner controls PR #6's
+merge. The prior review-candidate status below is preserved as history.
+
+## Historical Phase 03C implementation candidate (superseded by Owner acceptance)
+
+The Controller reviewed commit `6459a1ad7ee5a17994f484c04f47658a976d9ea6`
+and requested R1 rework on existing Draft PR #6: committed and pending reads
+must return `ErrUncertain` after an ambiguous write result. The correction at
+`e0704b4533aab522900c7d98584435f4c24021f1` and the functional Phase 03C
+implementation passed technical review. The Owner requested a
+[documentation-only risk and acceptance addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md)
+before deciding acceptance. This is not Phase 03C Owner acceptance; D-024 is
+**PROPOSED — AWAITING EXPLICIT OWNER ACCEPTANCE**, Draft PR #6 remains open,
+and Phase 03D remains unauthorized.
+
+The Owner authorized Phase 03C after the Phase 03B governance closeout merged
+into `test-mainet` at `61bc65fdebf358fb0330cb9ebd4a332ca4a06aca`.
+Work on `phase/03c-b0-state-persistence` adds standalone V2 account state,
+genesis parsing, sequential simulation, AppHash and a separate Pebble store.
+The Phase 02 ABCI runtime still rejects every transaction and uses its V1
+record and AppHash. D-020–D-023 remain accepted and unchanged. D-024 proposes
+the physical V2 storage layout for Controller and Owner review; it is not yet
+accepted. Phase 03C completion is subject to evidence, CI and independent
+review. Phase 03D and all later phases are **NOT AUTHORIZED**.
+
+## Historical governance closeout after Phase 03B merge
 
 Phase 03B is **completed, Controller-accepted, and merged** via PR #4 into
 `test-mainet` at `8be07c87abed73763d40252e99bbf0573da487b4`. The Owner

@@ -1,6 +1,24 @@
-# Phase status — 2026-10-23
+# Phase status — 2026-10-24
 
-## Current Phase 03C implementation candidate
+## Current Phase 03C Owner acceptance and pre-merge closeout
+
+**Phase 03C — COMPLETED, CONTROLLER ACCEPTED, OWNER ACCEPTED, AWAITING
+OWNER-CONTROLLED MERGE OF PR #6.** The Owner accepted the implementation,
+R1 fail-closed read correction, risk addendum and D-024 on 2026-10-24.
+D-024 is accepted only as a correctness-oriented experimental B0 persistence
+baseline. The reviewed branch commit is
+`3484c0f3a47dffa24ddcc0dbad2d95ca23ce31fc`; PR #6 remains open and
+Draft against `test-mainet`. This acceptance is not a merge.
+
+`internal/b0state` and `internal/b0store` remain standalone. The live Phase 02
+ABCI application still rejects every transaction and uses V1 state and
+AppHash. The [risk addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md)
+retains R2, cross-store matrix M1–M12 (**NOT RUN** for B0 V2), full-state O(K)
+benchmark requirements and Phase 03D gates G1–G8 (**NOT SATISFIED**).
+No Phase 03D or later implementation is authorized; the Owner controls PR #6's
+merge. The prior review-candidate status below is preserved as history.
+
+## Historical Phase 03C implementation candidate (superseded by Owner acceptance)
 
 The Controller reviewed commit `6459a1ad7ee5a17994f484c04f47658a976d9ea6`
 and requested R1 rework on existing Draft PR #6: committed and pending reads

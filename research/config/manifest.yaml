@@ -1,20 +1,21 @@
-# Phase 03C isolated V2 state candidate over the unchanged Phase 02 runtime.
+# Phase 03C Owner-accepted isolated V2 state awaiting owner-controlled merge.
 # This is a tested development configuration, not a performance experiment.
 project:
   name: Pluto
   research_title: Evaluation of Resource Cost and Processing Correctness for Hybrid secp256k1–ML-DSA-44 Transactions in a CometBFT-Based Blockchain Application under Deliberately Invalid Input Workloads
   phase: "03C"
-  active_authorization: phase_03c_isolated_state_and_persistence_only
+  active_authorization: phase_03c_documentation_acceptance_closeout_only
   phase_03b_status: completed_controller_accepted_merged
-  phase_03c_implementation_authorized: true
-  phase_03c_status: controller_rework_R1_candidate_pending_review
+  phase_03c_implementation_authorized: false
+  phase_03c_was_authorized: true
+  phase_03c_status: completed_controller_owner_accepted_awaiting_owner_merge
   phase_03d_implementation_authorized: false
   implementation_status: single_validator_empty_block_foundation_plus_isolated_b0_library_and_v2_state
   phase_03a_specification_authorized: true
   phase_03b_was_authorized: true
   evm_decision: conditional_phase_04_after_b0_core
   b0_protocol_status: accepted_by_owner_stateless_and_isolated_state_subsets_implemented
-  v2_physical_layout_decision: D024_proposed_not_owner_accepted
+  v2_physical_layout_decision: D024_owner_accepted_2026_10_24_experimental_baseline
 application:
   version: 0.2.0-foundation
   state_format_version: 1
@@ -29,7 +30,8 @@ source:
   phase_03b_merge_commit: 8be07c87abed73763d40252e99bbf0573da487b4
   phase_03b_governance_merge_commit: 61bc65fdebf358fb0330cb9ebd4a332ca4a06aca
   accepted_protocol_commit: e205a2195d3beb634842cf986e1df5d0ed542dbb
-  result_commit: recorded_in_phase_03c_final_chat_and_draft_pr
+  reviewed_branch_commit: 3484c0f3a47dffa24ddcc0dbad2d95ca23ce31fc
+  closeout_result_commit: recorded_in_closeout_report_and_draft_pr
   phase_01_baseline_manifest: research/evidence/phase_02/BASELINE_SHA256.txt
   phase_02_source_manifest: research/evidence/phase_02/RESULT_SHA256.txt
 toolchain:
@@ -72,10 +74,14 @@ build:
   configuration: standard_go_compiler_with_revision_ldflag
   binaries: build/plutod_and_build/cometbft
 verification:
-  status: phase_03c_candidate_pending_final_ci_and_review
-  suite: build_test_vet_fmt_mod_verify_integration_race_coverage_fuzz_oracle
+  status: phase_03c_owner_accepted_pre_merge_closeout
+  phase_03c_historical_suite: build_test_vet_fmt_mod_verify_integration_race_coverage_fuzz_oracle
+  closeout_suite: diff_check_make_verify_integration_consistency_source_diff
   evidence: research/evidence/phase_03c/
-  closeout_evidence: research/evidence/phase_03b_closeout/verification.log
+  risk_addendum: research/evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md
+  future_b0_v2_cross_store_recovery: not_run
+  phase_03b_closeout_evidence: research/evidence/phase_03b_closeout/verification.log
+  phase_03c_closeout_evidence: research/evidence/phase_03c_closeout/verification.log
   limitations: isolated_process_kill_and_graceful_restart_only_no_power_loss_four_validator_or_cross_store_replay_test
 experiments:
   status: not_applicable

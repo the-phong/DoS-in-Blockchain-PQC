@@ -205,3 +205,22 @@ gates without implementing them. D-024 remains **PROPOSED — AWAITING EXPLICIT
 OWNER ACCEPTANCE**. This addendum does not alter the historical test record,
 accepted protocol specifications or live Phase 02 runtime; PR #6 remains
 Draft and Phase 03D remains unauthorized.
+
+## Owner acceptance and pre-merge closeout addendum — 2026-10-24
+
+The Controller accepted the Phase 03C implementation, R1 correction and
+[risk addendum](../evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md). The
+Owner accepted those deliverables and D-024 on 2026-10-24. D-024's separate
+Pebble database and single `PLUTOS2!` complete-state record, replaced with
+`DB.Set(key, value, pebble.Sync)`, are accepted only as a correctness-oriented
+experimental B0 baseline. This acceptance does not merge Draft PR #6 or
+activate B0 transaction handling in the Phase 02 node.
+
+The prior proposal and review-candidate statements above are preserved as
+historical execution records. R1's uncertain-commit fail-closed reads remain
+required. R2's O(K) validation cost, the unexecuted B0 V2 cross-store matrix
+M1–M12, future account-count benchmarks and Phase 03D safety gates G1–G8
+remain open. No arbitrary-power-loss or production durability guarantee is
+claimed. Phase 03D is not authorized. This closeout changes documentation
+only; new command output is recorded separately under
+`research/evidence/phase_03c_closeout/`.

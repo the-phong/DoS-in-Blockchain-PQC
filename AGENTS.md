@@ -1,6 +1,20 @@
 # Pluto agent execution contract
 
-## Current authority — Phase 03C (2026-10-23)
+## Current authority — Phase 03C Owner acceptance closeout (2026-10-24)
+
+The Owner accepted Phase 03C, Controller R1, the risk addendum and D-024 on
+2026-10-24. D-024's single-record Pebble layout is accepted only as an
+experimental, correctness-oriented B0 baseline. Phase 03C is complete and
+Controller/Owner accepted, but Draft PR #6 is awaiting Owner-controlled
+merge into `test-mainet`. The coding agent may update only acceptance
+documentation and new closeout evidence on the existing
+`phase/03c-b0-state-persistence` branch, commit and push that branch, verify
+CI and stop. It must not merge, modify runtime or accepted protocol, activate
+B0 transactions or begin Phase 03D. The R2 performance finding, cross-store
+matrix M1–M12 and future Phase 03D gates G1–G8 remain open. The Phase 02
+ABCI node still rejects every transaction.
+
+## Historical Phase 03C implementation authority (superseded by Owner acceptance)
 
 The Owner explicitly authorized Phase 03C on
 `phase/03c-b0-state-persistence` from verified `test-mainet` SHA
@@ -74,7 +88,7 @@ next phase.
 The owner approved Master Roadmap v2: finish minimal B0-Core through Phase
 03E before the Phase 04 decision on whether sequential EVM integration is
 necessary. EVM is optional pending that decision; if approved, execution must
-begin sequentially. Phase 03C alone is now authorized;
+begin sequentially. Phase 03C is accepted and awaiting Owner-controlled merge;
 03D–14 remain future work until separately authorized. Do not design admission
 optimization before Phase 11 profiling.
 
@@ -173,5 +187,6 @@ Do not infer approval from a PASS verdict or from roadmap text.
   report and `research/evidence/` as appropriate. Record revision, toolchain,
   workload seeds, hardware and configuration for later experiments.
 - A phase report is an engineering claim for independent review, not approval.
-  Stop at the end of Phase 03A after its report. Record the controller's and
-  owner's decision before starting Phase 03B.
+  Historical Phase 03A required a STOP and separate Controller/Owner decision
+  before Phase 03B. Current Phase 03C closeout also ends with STOP; Phase 03D
+  requires separate Owner authorization.

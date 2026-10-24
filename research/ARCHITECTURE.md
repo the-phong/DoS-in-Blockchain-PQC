@@ -6,7 +6,8 @@ custom Go ABCI++ application connected by a localhost socket to a pinned
 CometBFT v0.38.26 child process. It is not an EVM or hybrid chain.
 Phase 02R retains this implementation. D-019 requires a complete minimal
 classical B0-Core before deciding at Phase 04 whether EVM integration is
-needed; only the isolated Phase 03C state subsystem is approved for coding.
+needed; Phase 03C's isolated state subsystem is Owner-accepted and awaiting
+Owner-controlled merge of Draft PR #6. No further implementation is authorized.
 The owner has accepted Phase 03A's B0 V1 transaction and V2 logical-state
 specifications in `research/specs/` and D-020–D-022 after Controller rework.
 The subsequent explicit Phase 03B authorization permits a standalone
@@ -19,7 +20,10 @@ The Owner then authorized Phase 03C from verified `test-mainet` SHA
 `internal/b0state` provides canonical V2 genesis/state, ordered transaction
 simulation and AppHash V2. Standalone `internal/b0store` persists one complete
 V2 snapshot in a separate Pebble database with a synchronous write and an
-isolated pending candidate. D-024 is a proposed physical-layout decision.
+isolated pending candidate. D-024 is Owner-accepted on 2026-10-24 strictly as
+a correctness-oriented experimental B0 layout. Its full-snapshot O(K) cost,
+unverified B0 V2 cross-store recovery and physical-failure limits remain in
+the [risk addendum](evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md).
 Neither package is imported by `internal/app` or `internal/node`; the current
 runtime AppHash remains the Phase 02 V1 digest. Phase 03D is unauthorized.
 

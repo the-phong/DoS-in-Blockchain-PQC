@@ -1,0 +1,88 @@
+# Phase 03C Owner-accepted isolated V2 state awaiting owner-controlled merge.
+# This is a tested development configuration, not a performance experiment.
+project:
+  name: Pluto
+  research_title: Evaluation of Resource Cost and Processing Correctness for Hybrid secp256k1–ML-DSA-44 Transactions in a CometBFT-Based Blockchain Application under Deliberately Invalid Input Workloads
+  phase: "03C"
+  active_authorization: phase_03c_documentation_acceptance_closeout_only
+  phase_03b_status: completed_controller_accepted_merged
+  phase_03c_implementation_authorized: false
+  phase_03c_was_authorized: true
+  phase_03c_status: completed_controller_owner_accepted_awaiting_owner_merge
+  phase_03d_implementation_authorized: false
+  implementation_status: single_validator_empty_block_foundation_plus_isolated_b0_library_and_v2_state
+  phase_03a_specification_authorized: true
+  phase_03b_was_authorized: true
+  evm_decision: conditional_phase_04_after_b0_core
+  b0_protocol_status: accepted_by_owner_stateless_and_isolated_state_subsets_implemented
+  v2_physical_layout_decision: D024_owner_accepted_2026_10_24_experimental_baseline
+application:
+  version: 0.2.0-foundation
+  state_format_version: 1
+  isolated_b0_state_format_version: 2
+  module_path: example.com/pluto
+  module_path_status: provisional_migration_required
+source:
+  source_branch: test-mainet
+  source_commit: 61bc65fdebf358fb0330cb9ebd4a332ca4a06aca
+  working_branch: phase/03c-b0-state-persistence
+  phase_03b_result_commit: 96d395ca0d8218ed3eb52fbf24c9b0cf528ba8b1
+  phase_03b_merge_commit: 8be07c87abed73763d40252e99bbf0573da487b4
+  phase_03b_governance_merge_commit: 61bc65fdebf358fb0330cb9ebd4a332ca4a06aca
+  accepted_protocol_commit: e205a2195d3beb634842cf986e1df5d0ed542dbb
+  reviewed_branch_commit: 3484c0f3a47dffa24ddcc0dbad2d95ca23ce31fc
+  closeout_result_commit: recorded_in_closeout_report_and_draft_pr
+  phase_01_baseline_manifest: research/evidence/phase_02/BASELINE_SHA256.txt
+  phase_02_source_manifest: research/evidence/phase_02/RESULT_SHA256.txt
+toolchain:
+  go_observed: go1.24.1
+  go_mod_minimum: "1.24.0"
+  platform_observed: linux/amd64
+dependencies:
+  current_third_party: cometbft_and_pebble_with_transitives
+  cometbft:
+    module: github.com/cometbft/cometbft
+    selected_version: v0.38.26
+    status: pinned_compiled_integrated_single_validator_tested
+  secp256k1:
+    module: github.com/decred/dcrd/dcrec/secp256k1/v4
+    selected_version: v4.4.1
+    minimum_go: "1.17"
+    status: owner_accepted_D023_pinned_direct_stateless_authentication_only
+  evm:
+    module: github.com/ethereum/go-ethereum
+    candidate_version: v1.16.8
+    status: provisional_module_metadata_checked_integration_unverified
+  storage:
+    module: github.com/cockroachdb/pebble
+    selected_version: v1.1.5
+    status: pinned_v1_runtime_and_isolated_v2_sync_write_restart_tested
+  mldsa44:
+    module: github.com/cloudflare/circl
+    candidate_version: v1.6.4
+    status: provisional_api_and_vectors_unverified
+environment:
+  operating_system: WSL2_Ubuntu_linux_amd64
+  docker: unavailable
+  deployment: local_single_validator
+  rpc_default: 127.0.0.1:26657
+  p2p_default: 127.0.0.1:26656
+  abci_default: 127.0.0.1:26658
+  empty_block_interval: 1s
+build:
+  command: make build
+  configuration: standard_go_compiler_with_revision_ldflag
+  binaries: build/plutod_and_build/cometbft
+verification:
+  status: phase_03c_owner_accepted_pre_merge_closeout
+  phase_03c_historical_suite: build_test_vet_fmt_mod_verify_integration_race_coverage_fuzz_oracle
+  closeout_suite: diff_check_make_verify_integration_consistency_source_diff
+  evidence: research/evidence/phase_03c/
+  risk_addendum: research/evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md
+  future_b0_v2_cross_store_recovery: not_run
+  phase_03b_closeout_evidence: research/evidence/phase_03b_closeout/verification.log
+  phase_03c_closeout_evidence: research/evidence/phase_03c_closeout/verification.log
+  limitations: isolated_process_kill_and_graceful_restart_only_no_power_loss_four_validator_or_cross_store_replay_test
+experiments:
+  status: not_applicable
+  results: none

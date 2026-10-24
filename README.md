@@ -9,8 +9,8 @@ production chain, EVM, hybrid verifier or multi-validator experiment.
 ## Prerequisites and build
 
 On Linux/WSL2, install Go 1.24.x or newer and GNU Make. Network access is
-needed on first build to download exact pinned Go modules. Docker and a Git
-identity are not required. From this directory:
+needed on first build to download exact pinned Go modules. Docker is not
+required. From this directory:
 
 ```bash
 make build
@@ -39,6 +39,8 @@ all three at init with `--rpc-port`, `--p2p-port`, `--abci-port` for another
 local test. Empty blocks are configured every second. Protect files under
 `.pluto/config/`, especially private validator and node keys; never publish
 them or expose the development RPC/validator publicly.
+Protect `config.toml` as well: startup does not recheck its listener and proxy
+addresses against the localhost metadata written by `init`.
 
 From another terminal, inspect real CometBFT RPC responses:
 
@@ -90,7 +92,36 @@ Phase 01 baseline checksums in
 [Architecture](research/ARCHITECTURE.md), [decisions](research/DECISIONS.md),
 [phase status](research/PHASE_STATUS.md) and the
 [manifest](research/config/manifest.yaml) are the current governance records.
-The 14-phase [master plan](research/MASTER_PLAN.md) is unchanged. Phase 03
-classical transaction work is **not authorized**; independent review follows
-this report. No Git commit, branch or remote is required for this local phase.
+The [Phase 02R independent review](research/PHASE_REPORTS/PHASE_02R_REPORT.md)
+records fresh checks and limitations. The 14-phase [master plan](research/MASTER_PLAN.md)
+now places minimal B0-Core before a conditional Phase 04 EVM decision.
+Phase 03B is completed, Controller-accepted and merged through PR #4 at
+`8be07c87abed73763d40252e99bbf0573da487b4`; the Owner accepted D-023.
+Phase 03C is completed, Controller-accepted and Owner-accepted on 2026-10-24,
+awaiting the Owner-controlled merge of Draft PR #6 into `test-mainet`. D-024
+accepts its single-record V2 Pebble layout only as an experimental,
+correctness-oriented baseline. The isolated V2 state and persistence packages
+do not run in the live node, which still rejects all transactions. B0 V2
+cross-store recovery has not been tested; see the
+[risk addendum](research/evidence/phase_03c/RISK_AND_ACCEPTANCE_ADDENDUM.md).
+Phase 03D and later work are not authorized. D-018 governs new work:
+one approved phase per branch, Draft PRs to `test-mainet`, and owner-controlled
+merges. The Phase 02 local-only Git exception remains in historical records.
+
+## Phase 03A accepted protocol specification
+
+The owner authorized and accepted the specification-only Phase 03A B0 V1
+protocol and decisions D-020–D-022 after Controller rework. The accepted
+[B0 transaction format](research/specs/B0_CLASSICAL_TRANSACTION_PROTOCOL_V1.md),
+[account transitions and AppHash V2](research/specs/B0_STATE_TRANSITION_SPEC_V1.md),
+[ABCI validity policy](research/specs/B0_ABCI_VALIDITY_SPEC_V1.md) and
+[test-vector plan](research/specs/B0_TEST_VECTOR_PLAN_V1.md) are protocol and
+test requirements. Phase 03A PR #3 was merged into `test-mainet` at
+`54bf720ac4625c17eaa6101a8f398ef7c0663432`. Phase 03B now implements a
+standalone `internal/tx` library; the current binary still rejects all
+transactions. Phase 03B PR #4 is merged. Phase 03C adds a standalone
+`internal/b0state` transition engine and `internal/b0store` V2 persistence
+adapter; neither is connected to the live ABCI application. See the
+[Phase 03C report](research/PHASE_REPORTS/PHASE_03C_REPORT.md) for verification
+and limitations.
 

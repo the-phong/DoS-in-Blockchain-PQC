@@ -1,5 +1,26 @@
 # Architectural decision log
 
+## D-044 — Delegated bounded Gate QUALITY acceptance and G00 integration (2026-11-14)
+
+The Owner instructed autonomous completion of the outside master checklist
+G00.1–G00.4 and X01–X18, then reiterated that the agent should complete the
+work in a logically correct order and return the result. After the
+[Controller technical review](evidence/file02/quality/GATE_QUALITY_CONTROLLER_REVIEW_20261114.md)
+and four successful PR #28 CI checks, the delegated
+[Gate QUALITY decision](evidence/file02/quality/GATE_QUALITY_OWNER_DECISION.md)
+accepts Q01–Q04 and Q07 as bounded PASS, with Q05–Q06 remaining PARTIAL and
+unchecked. This is delegated technical acceptance, not a claim that the
+Owner personally reviewed every raw run. The 3-second RQ1b negative result
+is limited to tested single-host RPC-origin matched strata; the binary
+endpoint is ceiling-limited and does not establish latency equivalence,
+an absent knee, distributed behavior or DoS.
+
+The same instruction authorizes G00.2 integration of PR #28 after final
+head-SHA and CI verification. The merge SHA belongs in the subsequent
+post-merge record. The X program may begin only after a prospective
+measurement addendum is locked; no historical protocol, raw or S06 cap may
+change. This decision does not open D cases or ML training.
+
 ## D-043 — Owner accepts bounded Gate ATTACK and opens Q01–Q07 (2026-11-14)
 
 The Owner accepted the [section 5 engineering disposition](evidence/file02/ATTACK_GROUP_ENGINEERING_CLOSEOUT_20261114.md)

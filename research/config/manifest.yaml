@@ -33,10 +33,10 @@ project:
   file02_a_group_status: owner_accepted_bounded_11_pass_2_partial_1_unsupported_2026_11_14
   file02_a_merge_commit: 2b453b3c14c410545d5699e03cff90d0eb21d63e
   file02_q_group_status: five_pass_two_partial_engineering_disposition_controller_owner_review_pending
-  file02_q_gate_status: pending_controller_owner_review_no_automatic_D_authority
+  file02_q_gate_status: D044_delegated_bounded_acceptance_five_pass_two_partial_no_D_authority
   file02_q_base_commit: 2b453b3c14c410545d5699e03cff90d0eb21d63e
   file02_q_result_branch: research/file02-q01-q07
-  active_authorization: file02_Q01_Q07_quality_control_2026_11_14
+  active_authorization: file02_G00_closeout_then_X_extension_2026_11_14
   baseline_branch: test-mainet
   baseline_commit: e0bcd9e0f903a2e807a3d28adc5554dffa48e1f1
   baseline_tree: 71d03c1d083724b1bba73e62b024766cfaaedc5a

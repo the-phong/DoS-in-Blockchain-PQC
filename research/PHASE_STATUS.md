@@ -1,5 +1,15 @@
 # Phase status — 2026-11-14
 
+## Delegated Gate QUALITY closeout and bounded X authority
+
+Under [D-044](DECISIONS.md), the Owner delegated autonomous G00.1–G00.4
+and X01–X18 completion. The bounded Gate QUALITY technical disposition is
+Q01–Q04 and Q07 PASS, Q05–Q06 PARTIAL/unchecked. PR #28 is the integration
+vehicle; its merge SHA is pending G00.2. The historical RQ1b 3-second
+negative endpoint remains ceiling-limited and confined to tested single-host
+RPC strata. The X extension requires a locked prospective protocol before
+new runs; D/ML are not opened.
+
 ## Current Checklist 02 section 6 authority
 
 Under [D-043](DECISIONS.md), the Owner accepted Gate ATTACK for the bounded

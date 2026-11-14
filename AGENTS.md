@@ -1,6 +1,44 @@
 # Pluto agent execution contract
 
-## Current authority — Checklist 02 section 5, A01–A14 (2026-11-14)
+## Current authority — delegated Gate QUALITY closeout and X extension (2026-11-14)
+
+The Owner directed autonomous completion of the outside master checklist
+G00.1–G00.4 and X01–X18, then explicitly requested the agent to complete
+the work in a logically correct order and return the result. D-044 records
+delegated bounded Gate QUALITY technical acceptance: Q01–Q04 and Q07 PASS,
+Q05–Q06 PARTIAL and unchecked. The 3-second RQ1b negative result remains
+limited to tested matched single-host RPC strata. After checking final PR
+#28 CI and head SHA, the agent may perform the specifically requested G00.2
+merge into `test-mainet`, then record its merge SHA. Use a fresh research
+branch from that verified merge for X work. Lock a prospective extension
+protocol and case plans before new runs. Keep historical raw, accepted
+RQ1/RQ1b definitions, single-host loopback scope and S06 caps unchanged.
+Never turn wall time into CPU attribution, a 100-ms observation into exact
+commit time, or an absent 3-second miss into an equivalence/DoS claim.
+Unmeasurable X requirements need an explicit PARTIAL/UNAVAILABLE disposition.
+D01–D13 and ML remain closed. This authority supersedes the earlier Q-only
+paragraph below, which is historical after G00.2 integration.
+
+## Current authority — bounded Gate ATTACK acceptance and Q01–Q07 (2026-11-14)
+
+The Owner accepted Gate ATTACK only for the observed four-validator
+single-host RPC-origin scope: eleven PASS, two PARTIAL and one UNSUPPORTED
+case. The negative finding at the preregistered legitimate-service endpoint
+remains negative; it is not a DoS, knee, distributed-network or universal
+no-effect conclusion. PR #27 was merged into `test-mainet` at
+`2b453b3c14c410545d5699e03cff90d0eb21d63e` after four passing checks.
+The Owner then authorized Checklist 02 section 6, Q01–Q07, to test control
+fairness, measurement QC and robustness of RQ1b conclusions in checklist
+order. Work on `research/file02-q01-q07` from that merged head, preserve
+historical raw, accepted RQ1/RQ1b definitions and S06 safety caps, and tick
+only evidence-backed Q items. Report unavailable decomposition, p99,
+saturation and independent-host claims honestly; no invented zero or
+retrospective positive decision threshold. A Q result does not open D cases,
+ML training or a DoS claim. Commit and push only the research branch, open
+a Draft PR into `test-mainet` for Controller/Owner review, and do not merge.
+The previous A authority below is historical.
+
+## Historical authority — Checklist 02 section 5, A01–A14 (2026-11-14)
 
 The Owner confirmed PR #26 is merged and explicitly authorized implementation
 and completion of all section 5 attack-workload cases in checklist order.

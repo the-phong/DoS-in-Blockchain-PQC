@@ -1,5 +1,46 @@
 # Architectural decision log
 
+## D-044 — Delegated bounded Gate QUALITY acceptance and G00 integration (2026-11-14)
+
+The Owner instructed autonomous completion of the outside master checklist
+G00.1–G00.4 and X01–X18, then reiterated that the agent should complete the
+work in a logically correct order and return the result. After the
+[Controller technical review](evidence/file02/quality/GATE_QUALITY_CONTROLLER_REVIEW_20261114.md)
+and four successful PR #28 CI checks, the delegated
+[Gate QUALITY decision](evidence/file02/quality/GATE_QUALITY_OWNER_DECISION.md)
+accepts Q01–Q04 and Q07 as bounded PASS, with Q05–Q06 remaining PARTIAL and
+unchecked. This is delegated technical acceptance, not a claim that the
+Owner personally reviewed every raw run. The 3-second RQ1b negative result
+is limited to tested single-host RPC-origin matched strata; the binary
+endpoint is ceiling-limited and does not establish latency equivalence,
+an absent knee, distributed behavior or DoS.
+
+The same instruction authorizes G00.2 integration of PR #28 after final
+head-SHA and CI verification. The merge SHA belongs in the subsequent
+post-merge record. The X program may begin only after a prospective
+measurement addendum is locked; no historical protocol, raw or S06 cap may
+change. This decision does not open D cases or ML training.
+
+## D-043 — Owner accepts bounded Gate ATTACK and opens Q01–Q07 (2026-11-14)
+
+The Owner accepted the [section 5 engineering disposition](evidence/file02/ATTACK_GROUP_ENGINEERING_CLOSEOUT_20261114.md)
+under the [bounded Gate record](evidence/file02/ATTACK_GATE_BOUNDED_ACCEPTANCE_20261114.md)
+with eleven PASS (A01–A10, A14), two PARTIAL (A11, A13) and one UNSUPPORTED
+(A12) case. PR #27 merged it into `test-mainet` at
+`2b453b3c14c410545d5699e03cff90d0eb21d63e` after four passing CI
+checks. The accepted negative finding is limited to the tested matched
+single-host RPC-origin legitimate-service endpoint and offered rates. It
+does not prove absence of an effect elsewhere, a knee, DoS, direct P2P-origin
+or independent-host behavior. Open case boxes remain open.
+
+The Owner separately authorized Checklist 02 Q01–Q07 to audit matched
+controls, impact decomposition, p99 precision, rate fidelity, bottlenecks,
+replication and correctness of the RQ1b inference. This does not change the
+accepted RQ1 H-minus-CP hypothesis or the distinct RQ1b question. Preserve
+historical raw and S06 caps; compute only supported contrasts and mark
+missing data explicitly. Gate QUALITY requires Controller/Owner review; no
+D case, ML training, DoS conclusion or automatic merge is authorized.
+
 ## D-042 — Owner opens Checklist 02 section 5 A01–A14 (2026-11-14)
 
 After PR #26 merged the bounded Gate RQ1 acceptance into `test-mainet` at

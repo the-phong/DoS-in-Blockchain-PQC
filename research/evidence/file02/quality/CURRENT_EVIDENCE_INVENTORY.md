@@ -80,6 +80,16 @@ evidence. The current R15 verifier reports plan drift because current
 `go.mod` differs from the locked source commit; the historical module hash
 and raw integrity are distinguished in [Q05](Q05_BOTTLENECK_DISPOSITION.md).
 
+The CSV covers sessions with frozen QC reports. It does not fabricate
+`run_id` rows for report-only or unsupported cases. Their dispositions remain
+in [R05](../R05_VERIFY_ORDER_UNSUPPORTED.md),
+[R11](../R11_P2P_PROPAGATION_DISPOSITION.md),
+[R12](../R12_RPC_P2P_ORIGIN_UNSUPPORTED.md),
+[R13](../R13_CACHE_DEDUP_DISPOSITION.md),
+[A11](../A11_MATCHED_RESOURCE_DISPOSITION.md) and
+[A12](../A12_MANY_PEER_UNSUPPORTED.md). A11 and Q05/Q06 are PARTIAL, while
+R05/R12/A12 remain UNSUPPORTED under their respective case rules.
+
 ## Supported results and boundaries
 
 - [RQ1 resource report](../RQ1_RESOURCE_REPORT.md): application CheckTx
